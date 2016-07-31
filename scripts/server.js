@@ -13,10 +13,6 @@ module.export = function () {
   }
 };
 
-function getHello() {
-  console.log(...arguments);
-}
-
 function start(done) {
   const self = this;
   done = done || noop;
@@ -59,7 +55,6 @@ function stop(done) {
 
   self.app.close(function () {
     self.seneca.close(done);
-    inst
   });
 }
 
