@@ -9,5 +9,10 @@ module.exports = {
   "launch_in_dev": [
     "PhantomJS",
     "Chrome"
-  ]
+  ],
+  "proxies": {
+    "/auth": {
+      "target": "http://localhost:3000"
+    }
+  }
 };
