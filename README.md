@@ -65,7 +65,7 @@ export default Ember.Component.extend({
       this.get('senecaAuth').login('user@example.com', 'secret')
         .then((result) => console.log('Login successful', result))
         .catch((reason) => console.log('Login failed', reason));
-    }https://github.com/indr/ember-seneca-auth/blob/master/tests/acceptance/services/seneca-auth-test.js
+    }
   }
 })
 ```
@@ -102,17 +102,19 @@ The [seneca-auth service](https://github.com/indr/ember-seneca-auth/blob/master/
 
 ## Running
 
-* `ember serve`
+* `./scripts/start-server.sh`
+* `ember serve --proxy http://localhost:3000`
 * Visit your app at http://localhost:4200.
+* `./scripts/stop-server.sh`
 
 ## Running Tests
 
 * `npm test` (Runs `ember try:testall` to test your addon against multiple Ember versions). Automatically starts and stops the seneca server.
-* `./scripts/start-server.sh`
-  `ember test`
-  `./scripts/stop-server.sh`
-* `./scripts/start-server.sh`
-  `ember test --server`
+* `./scripts/start-server.sh`  
+  `ember test`  
+  `./scripts/stop-server.sh`  
+* `./scripts/start-server.sh`  
+  `ember test --server`  
   `./scripts/stop-server.sh`
 
 ## Building
