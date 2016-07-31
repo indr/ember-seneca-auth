@@ -1,5 +1,6 @@
 /* jshint expr:true */
 import assert from '../../helpers/assert';
+import Ember from 'ember';
 import {
   describeModule,
   it
@@ -8,6 +9,10 @@ import {
   beforeEach,
   describe
 } from 'mocha';
+
+const {
+  RSVP
+} = Ember;
 
 describeModule(
   'authenticator:seneca',
@@ -18,9 +23,20 @@ describeModule(
   },
   function () {
     let authenticator = null;
+    let senecaAuth = null;
 
     beforeEach(function () {
       authenticator = this.subject();
+      authenticator.senecaAuth = senecaAuth = {
+        login: function () {
+          this.lastArgs = Ember.A(arguments);
+          return Ember.RSVP.reject();
+        },
+        logout: function () {
+          this.lastArgs = Ember.A(arguments);
+          return Ember.RSVP.reject();
+        }
+      };
     });
 
     describe('restore', function () {
@@ -34,6 +50,85 @@ describeModule(
       it('returns a promise', function (done) {
         assert.isPromise(authenticator.authenticate());
         done();
+      });
+
+      it('logins with username and password', function (done) {
+        senecaAuth.login = function (username, password) {
+          assert.equal(username, 'user');
+          assert.equal(password, 'pass');
+          done();
+          return RSVP.reject();
+        };
+        authenticator.authenticate('user', 'pass');
+      });
+
+      it('invalid login: resolves with why/reason', function (done) {
+        senecaAuth.login = function () {
+          return RSVP.resolve({"ok": false, "why": 'just cause'});
+        };
+        authenticator.authenticate('user', 'pass')
+          .then((reason) => {
+            assert.equal(reason, 'just cause');
+            done();
+          });
+      });
+
+      it('invalid login/no why: resolves with no-reason', function (done) {
+        senecaAuth.login = function () {
+          return RSVP.resolve({"ok": false});
+        };
+        authenticator.authenticate('user', 'pass')
+          .then((reason) => {
+            assert.equal(reason, 'no-reason');
+            done();
+          });
+      });
+
+      it('successful login: resolves with login data', function (done) {
+        senecaAuth.login = function () {
+          return RSVP.resolve({
+            "ok": true,
+            "login": {
+              "nick": "nu1",
+              "user": "dhmwcf",
+              "when": "2016-07-31T09:06:05.692Z",
+              "active": true,
+              "why": "password",
+              "email": "u1@example.com",
+              "token": "0ead1216-20de-49a6-bacf-f432a8cb7de6",
+              "id": "0ead1216-20de-49a6-bacf-f432a8cb7de6"
+            }
+          });
+        };
+        authenticator.authenticate('user', 'pass')
+          .then((login) => {
+            assert.equal(login.user, 'dhmwcf');
+            assert.equal(login.why, 'password');
+            done();
+          });
+      });
+
+      it('successful login without token: resolves with no-token', function (done) {
+        senecaAuth.login = function () {
+          return RSVP.resolve({
+            "ok": true,
+            "login": {
+              "nick": "nu1",
+              "user": "dhmwcf",
+              "when": "2016-07-31T09:06:05.692Z",
+              "active": true,
+              "why": "password",
+              "email": "u1@example.com",
+              //"token": "0ead1216-20de-49a6-bacf-f432a8cb7de6",
+              "id": "0ead1216-20de-49a6-bacf-f432a8cb7de6"
+            }
+          });
+        };
+        authenticator.authenticate('user', 'pass')
+          .then((reason) => {
+            assert.equal(reason, 'no-token');
+            done();
+          });
       });
     });
 
