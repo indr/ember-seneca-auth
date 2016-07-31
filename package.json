@@ -1,7 +1,7 @@
 {
   "name": "ember-seneca-auth",
   "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "description": "Senecajs' seneca-auth api client and authenticator for ember-simple-auth",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -13,11 +13,14 @@
     "test": "ember try:each",
     "posttest": "scripts/stop-server.sh"
   },
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/indr/ember-seneca-auth.git"
+  },
   "engines": {
     "node": ">= 0.10.0"
   },
-  "author": "",
+  "author": "Reto Inderbitzin (https://github.com/indr)",
   "license": "MIT",
   "devDependencies": {
     "body-parser": "1.15.2",
@@ -52,7 +55,13 @@
     "seneca-web": "git+https://github.com/indr/seneca-web.git"
   },
   "keywords": [
-    "ember-addon"
+    "authentication",
+    "authenticator",
+    "ember",
+    "ember-addon",
+    "ember-simple-auth",
+    "seneca",
+    "seneca-auth"
   ],
   "dependencies": {
     "ember-cli-babel": "^5.1.6"
