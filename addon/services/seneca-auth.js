@@ -18,11 +18,13 @@ export default Ember.Service.extend({
   },
 
   logout() {
-    return RSVP.reject();
+    return this.get('client')
+      .makeRequest('POST', '/auth/logout');
   },
 
   user() {
-    return RSVP.reject();
+    return this.get('client')
+      .makeRequest('GET', '/auth/user');
   },
 
   register() {

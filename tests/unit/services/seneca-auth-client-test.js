@@ -32,42 +32,42 @@ describeModule(
       };
     });
 
-    describe('makeRequest', function () {
+    describe('makeRequest()', function () {
       it('returns a promise', function (done) {
         assert.isPromise(service.makeRequest('GET', '/x'));
         done();
       });
-    });
 
-    describe('exceptions', function () {
-      it('throws if no type is provided', function (done) {
-        try {
-          service.makeRequest();
-        }
-        catch (ex) {
-          assert.equal(ex.toString(), 'Error: type must be provided');
-          done();
-        }
-      });
+      describe('exceptions', function () {
+        it('throws if no type is provided', function (done) {
+          try {
+            service.makeRequest();
+          }
+          catch (ex) {
+            assert.equal(ex.toString(), 'Error: type must be provided');
+            done();
+          }
+        });
 
-      it('throws if no url is provided', function (done) {
-        try {
-          service.makeRequest('GET');
-        }
-        catch (ex) {
-          assert.equal(ex.toString() + '', 'Error: url must be provided');
-          done();
-        }
-      });
+        it('throws if no url is provided', function (done) {
+          try {
+            service.makeRequest('GET');
+          }
+          catch (ex) {
+            assert.equal(ex.toString() + '', 'Error: url must be provided');
+            done();
+          }
+        });
 
-      it('throws if url is root document', function (done) {
-        try {
-          service.makeRequest('GET', '/');
-        }
-        catch (ex) {
-          assert.equal(ex.toString() + '', 'Error: url must not be root index. This causes ember-cli or mocha to throw some weird beforeEach/afterEach hook exceptions');
-          done();
-        }
+        it('throws if url is root document', function (done) {
+          try {
+            service.makeRequest('GET', '/');
+          }
+          catch (ex) {
+            assert.equal(ex.toString() + '', 'Error: url must not be root index. This causes ember-cli or mocha to throw some weird beforeEach/afterEach hook exceptions');
+            done();
+          }
+        });
       });
     });
   }

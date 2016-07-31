@@ -23,7 +23,7 @@ describeModule(
       service = this.subject();
     });
 
-    describe('login', function () {
+    describe('login()', function () {
       it('success: returns a resolving promise with ok true and login data', function (done) {
         service.login('u1@example.com', 'pu1')
           .then(function (response) {
@@ -56,6 +56,26 @@ describeModule(
 
             done();
           });
+      });
+    });
+
+    describe('logout()', function () {
+      it('returns a resolving promise with ok true', function (done) {
+        service.logout()
+          .then(function (response) {
+            assert.equal(response.ok, true);
+            done();
+          });
+      });
+    });
+
+    describe('user()', function () {
+      it('returns a resolving promise with ok true', function (done) {
+        service.user()
+          .then(function (response) {
+            assert.equal(response.ok, true);
+            done();
+        });
       });
     });
   }

@@ -23,7 +23,7 @@ describeModule(
       service = this.subject();
     });
 
-    describe('makeRequest', function () {
+    describe('makeRequest()', function () {
       it('404: should return a rejecting promise with xhr object', function (done) {
         service.makeRequest('GET', '/non/existing/endpoint')
           .catch((xhr) => {
