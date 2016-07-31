@@ -1,4 +1,5 @@
 #!/bin/bash
+mkdir -p tmp
 if [ -f tmp/server.pid ]
 then
   ./scripts/stop-server.sh
