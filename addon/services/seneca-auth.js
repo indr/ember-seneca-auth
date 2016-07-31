@@ -27,8 +27,13 @@ export default Ember.Service.extend({
       .makeRequest('GET', '/auth/user');
   },
 
-  register() {
-    return RSVP.reject();
+  register(emailAddress, password) {
+    const data = {
+      email: emailAddress,
+      password: password
+    };
+    return this.get('client')
+      .makeRequest('POST', '/auth/register', null, data);
   },
 
   createReset() {

@@ -87,6 +87,18 @@ describeModule(
         assert.isPromise(service.register());
         done();
       });
+
+      it('makes a request to the authRegisterEndpoint', function (done) {
+        service.register('email', 'pass');
+        const a = authClient.lastArgs;
+        assert(a, 'makeRequest was not called');
+        assert.equal(a[0], 'POST');
+        assert.equal(a[1], '/auth/register');
+        assert.equal(a[2], null);
+        assert.equal(a[3].email, 'email');
+        assert.equal(a[3].password, 'pass');
+        done();
+      });
     });
 
     describe('createReset()', function () {

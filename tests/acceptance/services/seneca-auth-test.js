@@ -19,6 +19,11 @@ describeModule(
   function () {
     let service = null;
 
+    var i = new Date();
+    function getRandomEmailAddress() {
+      return `r-${i--}@example.com`;
+    }
+
     beforeEach(function () {
       service = this.subject();
     });
@@ -38,7 +43,7 @@ describeModule(
           });
       });
 
-      it('unknown user: returns a resolving promise with ok false', function (done) {
+      it('unknown user: returns a resolving promise with ok false and why', function (done) {
         service.login('unknown@example.com', 'password')
           .then(function (response) {
             assert.equal(response.ok, false);
@@ -48,7 +53,7 @@ describeModule(
           });
       });
 
-      it('invalid password: returns a resolving promise ok false', function (done) {
+      it('invalid password: returns a resolving promise ok false and why', function (done) {
         service.login('u1@example.com', 'wrong password')
           .then(function (response) {
             assert.equal(response.ok, false);
@@ -75,7 +80,35 @@ describeModule(
           .then(function (response) {
             assert.equal(response.ok, true);
             done();
-        });
+          });
+      });
+    });
+
+    describe('register()', function () {
+      it('success: it returns a resolving promise with ok true, user and login data', function (done) {
+        const emailAddress = getRandomEmailAddress();
+        service.register(emailAddress, 'secret')
+          .then(function (response) {
+            assert.equal(response.ok, true);
+            assert.isObject(response.user);
+            assert.isObject(response.login);
+            done();
+          });
+      });
+
+      it('nick exists: returns a resolving promise with ok false and why', function (done) {
+        const emailAddress = getRandomEmailAddress();
+        service.register(emailAddress, 'secret')
+          .then((response) => {
+            assert.equal(response.ok, true);
+
+            service.register(emailAddress, 'secret')
+              .then((response) => {
+                assert.equal(response.ok, false);
+                assert.equal(response.why, 'nick-exists');
+                done();
+              });
+          });
       });
     });
   }
