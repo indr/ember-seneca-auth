@@ -50,5 +50,15 @@ describeModule(
           });
       });
     });
+
+    describe('invalidate()', function () {
+      it('resolves with ok:true', function (done) {
+        authenticator.invalidate()
+          .then((response) => {
+            assert.equal(response.ok, true);
+            done();
+          });
+      });
+    });
   }
 );

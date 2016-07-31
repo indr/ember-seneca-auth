@@ -34,7 +34,13 @@ export default Base.extend({
   },
 
   invalidate(/*data*/) {
-    return this._super(...arguments);
+    const senecaAuth = this.get('senecaAuth');
+
+    return new RSVP.Promise((resolve) => {
+      senecaAuth.logout()
+        .then(resolve)
+        .catch(resolve);
+    });
   },
 
   _isOk(response) {

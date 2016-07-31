@@ -137,6 +137,28 @@ describeModule(
         assert.isPromise(authenticator.invalidate());
         done();
       });
+
+      it('it resolves after logout ', function (done) {
+        senecaAuth.logout = function () {
+          return RSVP.resolve('ok');
+        };
+        authenticator.invalidate()
+          .then((response) => {
+            assert.equal(response, 'ok');
+            done();
+          });
+      });
+
+      it('resolves even if logout rejects', function (done) {
+        senecaAuth.logout = function () {
+          return RSVP.reject('thats why');
+        };
+        authenticator.invalidate()
+          .then((response) => {
+            assert.equal(response, 'thats why');
+            done();
+          });
+      });
     });
   }
 );
