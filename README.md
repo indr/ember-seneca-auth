@@ -5,6 +5,7 @@
 [![npm version](https://badge.fury.io/js/ember-seneca-auth.svg)](https://badge.fury.io/js/ember-seneca-auth)
 [![Build Status](https://travis-ci.org/indr/ember-seneca-auth.svg?branch=master)](https://travis-ci.org/indr/ember-seneca-auth)
 [![dependencies Status](https://david-dm.org/indr/ember-seneca-auth/status.svg)](https://david-dm.org/indr/ember-seneca-auth)
+[![Code Climate](https://codeclimate.com/github/indr/ember-seneca-auth/badges/gpa.svg)](https://codeclimate.com/github/indr/ember-seneca-auth)
 
 This ember addon provides two features:
 
