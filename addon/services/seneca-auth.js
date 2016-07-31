@@ -1,10 +1,20 @@
 import Ember from 'ember';
 
-const { RSVP } = Ember;
+const {
+  RSVP
+} = Ember;
 
 export default Ember.Service.extend({
-  login() {
-    return RSVP.reject();
+  client: Ember.inject.service('seneca-auth-client'),
+
+  login(username, password) {
+    const data = {
+      username,
+      password
+    };
+
+    return this.get('client')
+      .makeRequest('POST', '/auth/login', null, data);
   },
 
   logout() {

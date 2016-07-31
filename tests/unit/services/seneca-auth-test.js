@@ -1,88 +1,106 @@
 /* jshint expr:true */
-//import { assert } from 'chai';
+import assert from '../../helpers/assert';
+import Ember from 'ember';
 import {
   describeModule,
   it
 } from 'ember-mocha';
 import {
-  beforeEach, describe
+  beforeEach,
+  describe
 } from 'mocha';
 
 describeModule(
   'service:seneca-auth',
-  'SenecaAuthService',
+  'Unit | SenecaAuthService',
   {
     // Specify the other units that are required for this test.
     // needs: ['service:foo']
   },
   function () {
-
     let service = null;
 
     beforeEach(function () {
       service = this.subject();
+      service.client = {
+        makeRequest: function () {
+          this.lastArgs = Ember.A(arguments);
+          return Ember.RSVP.reject();
+        }
+      };
     });
 
     describe('login', function () {
-      it('returns rejecting promise', function (done) {
-        service.login()
-          .catch(done);
+      it('returns a promise', function (done) {
+        assert.isPromise(service.login());
+        done();
+      });
+
+      it('makes a request to the authLoginEndpoint', function (done) {
+        service.login('user', 'pass');
+        const a = service.client.lastArgs;
+        assert.equal(a[0], 'POST');
+        assert.equal(a[1], '/auth/login');
+        assert.equal(a[2], null);
+        assert.equal(a[3].username, 'user');
+        assert.equal(a[3].password, 'pass');
+        done();
       });
     });
 
     describe('logout', function () {
-      it('returns rejecting promise', function (done) {
-        service.logout()
-          .catch(done);
+      it('return a promise', function (done) {
+        assert.isPromise(service.logout());
+        done();
       });
     });
 
     describe('user', function () {
-      it('returns rejecting promise', function (done) {
-        service.user()
-          .catch(done);
+      it('returns a promise', function (done) {
+        assert.isPromise(service.user());
+        done();
       });
     });
 
     describe('register', function () {
-      it('returns rejecting promise', function (done) {
-        service.register()
-          .catch(done);
+      it('returns a promise', function (done) {
+        assert.isPromise(service.register());
+        done();
       });
     });
 
     describe('createReset', function () {
-      it('returns rejecting promise', function (done) {
-        service.createReset()
-          .catch(done);
+      it('returns a promise', function (done) {
+        assert.isPromise(service.createReset());
+        done();
       });
     });
 
     describe('loadReset', function () {
-      it('returns rejecting promise', function (done) {
-        service.loadReset()
-          .catch(done);
+      it('returns a promise', function (done) {
+        assert.isPromise(service.loadReset());
+        done();
       });
     });
 
     describe('executeReset', function () {
-      it('returns rejecting promise', function (done) {
-        service.executeReset()
-          .catch(done);
+      it('returns a promise', function (done) {
+        assert.isPromise(service.executeReset());
+        done();
       });
     });
 
     describe('updateUser', function () {
-      it('returns rejecting promise', function (done) {
-        service.updateUser()
-          .catch(done);
+      it('returns a promise', function (done) {
+        assert.isPromise(service.updateUser());
+        done();
       });
     });
 
     describe('changePassword', function () {
-      it('returns rejecting promise', function (done) {
-        service.changePassword()
-          .catch(done);
+      it('returns a promise', function (done) {
+        assert.isPromise(service.changePassword());
+        done();
       });
     });
 
