@@ -11,6 +11,8 @@ This ember addon provides two features:
 * An [ember-simple-auth](http://ember-simple-auth.com/) authenticator
 * A service for the [seneca-auth](https://github.com/senecajs/seneca-auth) API
 
+`ember-simple-auth` is not part of this addon. It won't be installed to your Ember app.
+
 ## Installation
 
 You can install either with `ember install`:
@@ -62,19 +64,40 @@ export default Ember.Component.extend({
       this.get('senecaAuth').login('user@example.com', 'secret')
         .then((result) => console.log('Login successful', result))
         .catch((reason) => console.log('Login failed', reason));
-    }
+    }https://github.com/indr/ember-seneca-auth/blob/master/tests/acceptance/services/seneca-auth-test.js
   }
 })
 ```
+
+### Examples
+
+ * Look at the [acceptance tests](https://github.com/indr/ember-seneca-auth/blob/master/tests/acceptance/services/seneca-auth-test.js)
+   They use a real seneca backend. Have a look at the seneca server in the [scripts folder](https://github.com/indr/ember-seneca-auth/tree/master/scripts).
+ * [indr/addressbook-ember](https://github.com/indr/addressbook/ember)
 
 ## API methods
 
 The [seneca-auth service](https://github.com/indr/ember-seneca-auth/blob/master/addon/services/seneca-auth.js) provides methods according to the [seneca-auth API](https://github.com/senecajs/seneca-auth#api)
 
+ * `senecaAuth.login(username, password)`
+ * `senecaAuth.logout()`
+ * `senecaAuth.user()`
+ * `senecaAuth.register(emailAddress, password)`
+ * `senecaAuth.createReset()` (tbd)
+ * `senecaAuth.loadReset()` (tbd)
+ * `senecaAuth.executeReset()` (tbd)
+ * `senecaAuth.updateUser()` (tbd)
+ * `senecaAuth.changePassword()` (tbd)
 
----
+## License
 
----
+[MIT](LICENSE.md)
+
+## Installation
+
+* `git clone` this repository
+* `npm install`
+* `bower install`
 
 ## Running
 
@@ -83,9 +106,13 @@ The [seneca-auth service](https://github.com/indr/ember-seneca-auth/blob/master/
 
 ## Running Tests
 
-* `npm test` (Runs `ember try:testall` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
+* `npm test` (Runs `ember try:testall` to test your addon against multiple Ember versions). Automatically starts and stops the seneca server.
+* `./scripts/start-server.sh`
+  `ember test`
+  `./scripts/stop-server.sh`
+* `./scripts/start-server.sh`
+  `ember test --server`
+  `./scripts/stop-server.sh`
 
 ## Building
 
