@@ -1,11 +1,12 @@
 /* jshint expr:true */
-import { assert } from 'chai';
+import assert from '../../helpers/assert';
 import {
   describeModule,
   it
 } from 'ember-mocha';
 import {
-  beforeEach, describe
+  beforeEach,
+  describe
 } from 'mocha';
 
 describeModule(
@@ -20,16 +21,53 @@ describeModule(
 
     beforeEach(function () {
       service = this.subject();
+      service.jQuery = {
+        ajax: function () {
+          return {
+            then: function (resolve, reject) {
+              reject(null);
+            }
+          };
+        }
+      };
     });
 
     describe('makeRequest', function () {
-      it('404: should return a rejecting promise with xhr object', function (done) {
-        service.makeRequest('GET', '/non/existing/endpoint')
-          .catch((xhr) => {
-            assert(xhr);
-            assert.equal(xhr.status, 404);
-            done();
-          });
+      it('returns a promise', function (done) {
+        assert.isPromise(service.makeRequest('GET', '/x'));
+        done();
+      });
+    });
+
+    describe('exceptions', function () {
+      it('throws if no type is provided', function (done) {
+        try {
+          service.makeRequest();
+        }
+        catch (ex) {
+          assert.equal(ex.toString(), 'Error: type must be provided');
+          done();
+        }
+      });
+
+      it('throws if no url is provided', function (done) {
+        try {
+          service.makeRequest('GET');
+        }
+        catch (ex) {
+          assert.equal(ex.toString() + '', 'Error: url must be provided');
+          done();
+        }
+      });
+
+      it('throws if url is root document', function (done) {
+        try {
+          service.makeRequest('GET', '/');
+        }
+        catch (ex) {
+          assert.equal(ex.toString() + '', 'Error: url must not be root index. This causes ember-cli or mocha to throw some weird beforeEach/afterEach hook exceptions');
+          done();
+        }
       });
     });
   }

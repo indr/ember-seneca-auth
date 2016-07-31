@@ -3,12 +3,23 @@ import Ember from 'ember';
 const {
   isEmpty,
   RSVP,
-  $: jQuery
+  $
 } = Ember;
 
 export default Ember.Service.extend({
+  jQuery: $,
 
   makeRequest(type, url, headers = {}, data = null) {
+    if (!type) {
+      throw new Error('type must be provided');
+    }
+    if (!url) {
+      throw new Error('url must be provided');
+    }
+    if (url === '/') {
+      throw new Error('url must not be root index. This causes ember-cli or mocha to throw some weird beforeEach/afterEach hook exceptions');
+    }
+
     const options = {
       url,
       data: data != null ? JSON.stringify(data) : null,
@@ -23,7 +34,7 @@ export default Ember.Service.extend({
     }
 
     return new RSVP.Promise((resolve, reject) => {
-      jQuery.ajax(options).then((response) => {
+      this.jQuery.ajax(options).then((response) => {
         resolve(response);
       }, (xhr) => {
         reject(xhr);
