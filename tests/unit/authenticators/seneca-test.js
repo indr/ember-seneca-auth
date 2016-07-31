@@ -62,23 +62,23 @@ describeModule(
         authenticator.authenticate('user', 'pass');
       });
 
-      it('invalid login: resolves with why/reason', function (done) {
+      it('invalid login: rejects with why/reason', function (done) {
         senecaAuth.login = function () {
           return RSVP.resolve({"ok": false, "why": 'just cause'});
         };
         authenticator.authenticate('user', 'pass')
-          .then((reason) => {
+          .catch((reason) => {
             assert.equal(reason, 'just cause');
             done();
           });
       });
 
-      it('invalid login/no why: resolves with no-reason', function (done) {
+      it('invalid login/no why: rejects with no-reason', function (done) {
         senecaAuth.login = function () {
           return RSVP.resolve({"ok": false});
         };
         authenticator.authenticate('user', 'pass')
-          .then((reason) => {
+          .catch((reason) => {
             assert.equal(reason, 'no-reason');
             done();
           });
@@ -108,7 +108,7 @@ describeModule(
           });
       });
 
-      it('successful login without token: resolves with no-token', function (done) {
+      it('successful login without token: rejects with no-token', function (done) {
         senecaAuth.login = function () {
           return RSVP.resolve({
             "ok": true,
@@ -125,7 +125,7 @@ describeModule(
           });
         };
         authenticator.authenticate('user', 'pass')
-          .then((reason) => {
+          .catch((reason) => {
             assert.equal(reason, 'no-token');
             done();
           });

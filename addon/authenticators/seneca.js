@@ -2,7 +2,8 @@ import Ember from 'ember';
 import Base from 'ember-simple-auth/authenticators/base';
 
 const {
-  isEmpty
+  isEmpty,
+  RSVP
 } = Ember;
 
 export default Base.extend({
@@ -13,18 +14,23 @@ export default Base.extend({
   },
 
   authenticate(username, password) {
+    const self = this;
     const senecaAuth = this.get('senecaAuth');
 
-    return senecaAuth.login(username, password)
-      .then((response) => {
-        if (this._isOk(response)) {
-          if (this._hasToken(response)) {
-            return response['login'];
+    return new RSVP.Promise((resolve, reject) => {
+      senecaAuth.login(username, password)
+        .then((response) => {
+          if (self._isOk(response)) {
+            if (self._hasToken(response)) {
+              return resolve(response['login']);
+            }
+            else {
+              return reject('no-token');
+            }
           }
-          return 'no-token';
-        }
-        return response['why'] || 'no-reason';
-      });
+          return reject(response['why'] || 'no-reason');
+        });
+    });
   },
 
   invalidate(/*data*/) {
