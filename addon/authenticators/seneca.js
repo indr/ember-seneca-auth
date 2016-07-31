@@ -9,8 +9,17 @@ const {
 export default Base.extend({
   senecaAuth: Ember.inject.service('seneca-auth'),
 
-  restore(/*data*/) {
-    return this._super(...arguments);
+  restore(data) {
+    const self = this;
+
+    return new RSVP.Promise((resolve, reject) => {
+      if (!self._hasToken(data)) {
+        reject('no-token');
+      }
+      else {
+        resolve(data);
+      }
+    });
   },
 
   authenticate(username, password) {
@@ -21,7 +30,7 @@ export default Base.extend({
       senecaAuth.login(username, password)
         .then((response) => {
           if (self._isOk(response)) {
-            if (self._hasToken(response)) {
+            if (self._hasLoginWithToken(response)) {
               return resolve(response['login']);
             }
             else {
@@ -47,7 +56,11 @@ export default Base.extend({
     return !isEmpty(response['ok']) && response['ok'] === true;
   },
 
-  _hasToken(response) {
-    return !isEmpty(response['login']) && !isEmpty(response['login']['token']);
+  _hasLoginWithToken(response) {
+    return !isEmpty(response['login']) && this._hasToken(response['login']);
+  },
+
+  _hasToken(login) {
+    return login && !isEmpty(login['token']);
   }
 });

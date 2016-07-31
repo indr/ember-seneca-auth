@@ -39,19 +39,35 @@ describeModule(
       };
     });
 
-    describe('restore', function () {
-      it('returns a promise', function (done) {
-        assert.isPromise(authenticator.restore());
-        done();
+    describe('restore()', function () {
+      it('rejects with no-token if login data has no token', function (done) {
+        authenticator.restore(null)
+          .catch((reason) => {
+            assert.equal(reason, 'no-token');
+            done();
+          });
+      });
+
+      it('resolves with login data', function (done) {
+        const login = {
+          "nick": "nu1",
+          "user": "dhmwcf",
+          "when": "2016-07-31T09:06:05.692Z",
+          "active": true,
+          "why": "password",
+          "email": "u1@example.com",
+          "token": "0ead1216-20de-49a6-bacf-f432a8cb7de6",
+          "id": "0ead1216-20de-49a6-bacf-f432a8cb7de6"
+        };
+        authenticator.restore(login)
+          .then((result) => {
+            assert.strictEqual(result, login);
+            done();
+          });
       });
     });
 
-    describe('authenticate', function () {
-      it('returns a promise', function (done) {
-        assert.isPromise(authenticator.authenticate());
-        done();
-      });
-
+    describe('authenticate()', function () {
       it('logins with username and password', function (done) {
         senecaAuth.login = function (username, password) {
           assert.equal(username, 'user');
@@ -132,19 +148,14 @@ describeModule(
       });
     });
 
-    describe('invalidate', function () {
-      it('returns a promise', function (done) {
-        assert.isPromise(authenticator.invalidate());
-        done();
-      });
-
+    describe('invalidate()', function () {
       it('it resolves after logout ', function (done) {
         senecaAuth.logout = function () {
           return RSVP.resolve('ok');
         };
         authenticator.invalidate()
-          .then((response) => {
-            assert.equal(response, 'ok');
+          .then((result) => {
+            assert.equal(result, 'ok');
             done();
           });
       });
@@ -154,8 +165,8 @@ describeModule(
           return RSVP.reject('thats why');
         };
         authenticator.invalidate()
-          .then((response) => {
-            assert.equal(response, 'thats why');
+          .then((result) => {
+            assert.equal(result, 'thats why');
             done();
           });
       });
