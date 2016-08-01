@@ -7,6 +7,14 @@
 
       {{#bs-form action="submit"}}
         {{#bs-form-group}}
+            <label class="control-label">Nick</label>
+          {{bs-input type="text" value=nick}}
+        {{/bs-form-group}}
+        {{#bs-form-group}}
+            <label class="control-label">Name</label>
+          {{bs-input type="text" value=name}}
+        {{/bs-form-group}}
+        {{#bs-form-group}}
             <label class="control-label">Email address</label>
           {{bs-input type="text" value=emailAddress}}
         {{/bs-form-group}}

@@ -87,11 +87,16 @@ describeModule(
     describe('register()', function () {
       it('success: it returns a resolving promise with ok true, user and login data', function (done) {
         const emailAddress = getRandomEmailAddress();
-        service.register(emailAddress, 'secret')
+        service.register(emailAddress, 'secret', 'nick', 'name')
           .then(function (response) {
             assert.equal(response.ok, true);
             assert.isObject(response.user);
             assert.isObject(response.login);
+
+            const user = response.user;
+            assert.equal(user.email, emailAddress);
+            assert.equal(user.nick, 'nick');
+            assert.equal(user.name, 'name');
             done();
           });
       });

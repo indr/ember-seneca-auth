@@ -89,7 +89,7 @@ describeModule(
       });
 
       it('makes a request to the authRegisterEndpoint', function (done) {
-        service.register('email', 'pass');
+        service.register('email', 'pass', 'nick', 'name');
         const a = authClient.lastArgs;
         assert(a, 'makeRequest was not called');
         assert.equal(a[0], 'POST');
@@ -97,6 +97,8 @@ describeModule(
         assert.equal(a[2], null);
         assert.equal(a[3].email, 'email');
         assert.equal(a[3].password, 'pass');
+        assert.equal(a[3].nick, 'nick');
+        assert.equal(a[3].name, 'name');
         done();
       });
     });

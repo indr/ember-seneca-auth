@@ -6,10 +6,10 @@ export default FeatureBase.extend({
 
   actions: {
     submit() {
-      const {emailAddress, password} = this.getProperties('emailAddress', 'password');
+      const {emailAddress, password, nick, name} = this.getProperties('emailAddress', 'password', 'nick', 'name');
 
       this.handleResult(
-        this.get('senecaAuth').register(emailAddress, password));
+        this.get('senecaAuth').register(emailAddress, password, nick, name));
     }
   }
 });
