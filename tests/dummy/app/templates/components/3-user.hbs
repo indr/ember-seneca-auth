@@ -1,0 +1,15 @@
+<div class="row">
+    <div class="col-sm-6">
+        <h2>user()
+            <small>get the current user</small>
+        </h2>
+        <p>GET /auth/user</p>
+
+      {{#bs-form action="submit"}}
+        {{#bs-button type="primary" buttonType="submit"}}user{{/bs-button}}
+      {{/bs-form}}
+    </div>
+    <div class="col-sm-6">
+      {{response-view response=response xhr=xhr}}
+    </div>
+</div>

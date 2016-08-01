@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-sm-6">
+        <h2>login()
+            <small>a registered user</small>
+        </h2>
+        <p>POST /auth/login</p>
+
+      {{#bs-form action="submit"}}
+        {{#bs-form-group}}
+            <label class="control-label">Username or email address</label>
+          {{bs-input type="text" value=username}}
+        {{/bs-form-group}}
+        {{#bs-form-group}}
+            <label class="control-label">Password</label>
+          {{bs-input type="text" value=password}}
+        {{/bs-form-group}}
+
+        {{#bs-button type="primary" buttonType="submit"}}login{{/bs-button}}
+      {{/bs-form}}
+    </div>
+    <div class="col-sm-6">
+      {{response-view response=response xhr=xhr}}
+    </div>
+</div>

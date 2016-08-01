@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="col-sm-6">
+        <h2>ping
+            <small>seneca back-end</small>
+        </h2>
+        <p>GET /ping</p>
+        <p>See if the seneca server is running and responds to requests.</p>
+
+      {{#bs-form action="submit"}}
+        {{#bs-button type="primary" buttonType="submit"}}ping{{/bs-button}}
+      {{/bs-form}}
+    </div>
+    <div class="col-sm-6">
+      {{#response-view response=response xhr=xhr}}
+        {{#if xhr}}
+            <div class="alert alert-info">
+                <ul class="list-unstyled">
+                    <li>Did you start the seneca back-end with <code>./scripts/start-server.sh</code>?</li>
+                    <li>Did you start the app with <code>ember serve --proxy http://localhost:3000</code>?</li>
+                    <li>What is the response of <code>curl -v http://localhost:3000/ping</code>?</li>
+                </ul>
+            </div>
+        {{/if}}
+      {{/response-view}}
+    </div>
+</div>

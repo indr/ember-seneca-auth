@@ -1,0 +1,9 @@
+{{#if xhr}}
+    <h2>status: {{xhr.status}}</h2>
+    <pre>{{xhr.responseText}}</pre>
+{{/if}}
+{{#if response}}
+    <h2>ok: {{response.ok}}</h2>
+    <pre>{{json response}}</pre>
+{{/if}}
+{{yield}}

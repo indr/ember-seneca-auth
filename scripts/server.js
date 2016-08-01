@@ -26,7 +26,8 @@ function start(done) {
       done(null, {
         'date': new Date(),
         'seneca': this.version,
-        'status': 'ok'
+        'status': 'ok',
+        'ok': true
       });
     })
     .ready(function (err) {

@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-sm-6">
+        <h2>register()
+            <small>a new user</small>
+        </h2>
+        <p>POST /auth/register</p>
+
+      {{#bs-form action="submit"}}
+        {{#bs-form-group}}
+            <label class="control-label">Email address</label>
+          {{bs-input type="text" value=emailAddress}}
+        {{/bs-form-group}}
+        {{#bs-form-group}}
+            <label class="control-label">Password</label>
+          {{bs-input type="text" value=password}}
+        {{/bs-form-group}}
+
+        {{#bs-button type="primary" buttonType="submit"}}register{{/bs-button}}
+      {{/bs-form}}
+    </div>
+    <div class="col-sm-6">
+      {{response-view response=response xhr=xhr}}
+    </div>
+</div>
