@@ -13,6 +13,9 @@ module.exports = {
   "proxies": {
     "/auth": {
       "target": "http://localhost:3000"
+    },
+    "/ping": {
+      "target": "http://localhost:3000"
     }
   }
 };

@@ -127,11 +127,35 @@ describeModule(
         assert.isPromise(service.loadReset());
         done();
       });
+
+      it('makes a request to the authLoadResetEndpoint', function (done) {
+        service.loadReset('token');
+        const a = authClient.lastArgs;
+        assert(a, 'makeRequest was not called');
+        assert.equal(a[0], 'POST');
+        assert.equal(a[1], '/auth/load_reset');
+        assert.equal(a[2], null);
+        assert.equal(a[3].token, 'token');
+        done();
+      });
     });
 
     describe('executeReset()', function () {
       it('returns a promise', function (done) {
         assert.isPromise(service.executeReset());
+        done();
+      });
+
+      it('makes a request to the authExecuteResetEndpoint', function (done) {
+        service.executeReset('token', 'password', 'repeat');
+        const a= authClient.lastArgs;
+        assert(a, 'makeRequest was not called');
+        assert.equal(a[0], 'POST');
+        assert.equal(a[1], '/auth/execute_reset');
+        assert.equal(a[2], null);
+        assert.equal(a[3].token, 'token');
+        assert.equal(a[3].password, 'password');
+        assert.equal(a[3].repeat, 'repeat');
         done();
       });
     });

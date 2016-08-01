@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-sm-6">
+        <h2>executeReset()
+            <small>execute a password reset</small>
+        </h2>
+        <p>POST /auth/execute_reset</p>
+
+      {{#bs-form action="submit"}}
+        {{#bs-form-group}}
+            <label class="control-label">Reset token</label>
+          {{bs-input type="text" value=token}}
+        {{/bs-form-group}}
+        {{#bs-form-group}}
+            <label class="control-label">New password</label>
+          {{bs-input type="text" value=password}}
+        {{/bs-form-group}}
+        {{#bs-form-group}}
+            <label class="control-label">Repeat password</label>
+          {{bs-input type="text" value=repeat}}
+        {{/bs-form-group}}
+
+        {{#bs-button type="primary" buttonType="submit"}}execute reset{{/bs-button}}
+        {{#bs-button type="default" buttonType="reset"}}reset{{/bs-button}}
+      {{/bs-form}}
+    </div>
+    <div class="col-sm-6">
+      {{response-view response=response xhr=xhr}}
+    </div>
+</div>

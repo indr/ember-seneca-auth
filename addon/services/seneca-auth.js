@@ -49,12 +49,20 @@ export default Ember.Service.extend({
       .makeRequest('POST', '/auth/create_reset', null, data);
   },
 
-  loadReset() {
-    return RSVP.reject();
+  loadReset(token) {
+    return this.get('client')
+      .makeRequest('POST', '/auth/load_reset', null, {token});
   },
 
-  executeReset() {
-    return RSVP.reject();
+  executeReset(token, password, repeat) {
+    const data = {
+      token,
+      password,
+      repeat
+    };
+
+    return this.get('client')
+      .makeRequest('POST', '/auth/execute_reset', null, data);
   },
 
   updateUser() {

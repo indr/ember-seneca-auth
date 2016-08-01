@@ -1,5 +1,6 @@
 /* jshint expr:true */
 import { assert } from 'chai';
+import Ember  from 'ember';
 import {
   describeModule,
   it
@@ -9,6 +10,11 @@ import {
   beforeEach,
   describe
 } from 'mocha';
+
+const {
+  RSVP,
+  $: jQuery
+} = Ember;
 
 describeModule(
   'service:seneca-auth',
@@ -27,6 +33,25 @@ describeModule(
 
     function getRandomNick() {
       return v4().substr(0, 8);
+    }
+
+    function findResetToken() {
+      return new RSVP.Promise((resolve, reject) => {
+        const options = {
+          url: '/ping',
+          data: null,
+          type: 'GET',
+          dataType: 'json',
+          contentType: 'application/json',
+          headers: {}
+        };
+
+        jQuery.ajax(options).then((response) => {
+          resolve(response);
+        }, (xhr) => {
+          reject(xhr);
+        });
+      });
     }
 
     beforeEach(function () {
@@ -149,5 +174,103 @@ describeModule(
           });
       });
     });
+
+    describe('loadReset()', function () {
+      it('success: returns ok true and user data', function (done) {
+        const emailAddress = getRandomEmailAddress();
+        createAndFindResetToken(emailAddress, function (err, token) {
+          service.loadReset(token)
+            .then((response) => {
+              assert.equal(response.ok, true);
+              assert.equal(response.active, true);
+              assert.equal(response.nick, emailAddress);
+              done();
+            });
+        });
+      });
+
+      it('used token: returns ok true and active false', function (done) {
+        const emailAddress = getRandomEmailAddress();
+        createAndFindResetToken(emailAddress, function (err, token) {
+          service.executeReset(token, 'pass').then(() => {
+            service.loadReset(token)
+              .then((response) => {
+                assert.equal(response.ok, true);
+                assert.equal(response.active, false);
+                assert.equal(response.nick, emailAddress);
+                done();
+              });
+          });
+        });
+      });
+
+      it('unknown token: returns ok false and why', function (done) {
+        const token = v4();
+        service.loadReset(token)
+          .then((response) => {
+            assert.equal(response.ok, false);
+            assert.equal(response.why, 'reset-not-found');
+            done();
+          });
+      });
+    });
+
+    describe('executeReset()', function () {
+      it('success: resturns ok true and ...', function (done) {
+        var emailAddress = getRandomEmailAddress();
+        createAndFindResetToken(emailAddress, function (err, token) {
+          service.executeReset(token, 'pass', 'pass')
+            .then((response) => {
+              assert.equal(response.ok, true);
+              assert.isObject(response.user);
+              assert.isObject(response.reset);
+              assert.equal(response.reset.token, token);
+              done();
+            });
+        });
+      });
+
+      it('used token: returns ok true and ', function (done) {
+        var emailAddress = getRandomEmailAddress();
+        createAndFindResetToken(emailAddress, function (err, token) {
+          service.executeReset(token, 'pass', 'pass').then(() => {
+            service.executeReset(token, 'pass2', 'pass2')
+              .then((response) => {
+                assert.equal(response.ok, false);
+                assert.equal(response.token, token);
+                assert.equal(response.why, 'reset-not-active');
+                done();
+              });
+          });
+        });
+      });
+
+      it('unknown token: returns false and reset-not-found', function (done) {
+        service.executeReset('unknown token', 'pass')
+          .then((response) => {
+            assert.equal(response.ok, false);
+            assert.equal(response.token, 'unknown token');
+            assert.equal(response.why, 'reset-not-found');
+            done();
+          });
+      });
+    });
+
+    function createAndFindResetToken(emailAddress, done) {
+      service.register(emailAddress).then((response) => {
+        assert.equal(response.ok, true, response.why);
+        service.createReset(emailAddress).then((response) => {
+          assert.equal(response.ok, true, response.why);
+          findResetToken(emailAddress).then((response) => {
+            assert.equal(response.ok, true, response.why);
+            const token = response.resetToken;
+            assert.isString(token);
+            assert.isAbove(token.length, 0);
+
+            done(null, token);
+          });
+        });
+      });
+    }
   }
 );
