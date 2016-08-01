@@ -4,6 +4,7 @@ import {
   describeModule,
   it
 } from 'ember-mocha';
+import { v4 } from 'ember-uuid';
 import {
   beforeEach,
   describe
@@ -19,9 +20,13 @@ describeModule(
   function () {
     let service = null;
 
-    var i = new Date();
     function getRandomEmailAddress() {
-      return `r-${i--}@example.com`;
+      const id = v4().substr(0, 8);
+      return id + '@example.com';
+    }
+
+    function getRandomNick() {
+      return v4().substr(0, 8);
     }
 
     beforeEach(function () {
@@ -87,15 +92,17 @@ describeModule(
     describe('register()', function () {
       it('success: it returns a resolving promise with ok true, user and login data', function (done) {
         const emailAddress = getRandomEmailAddress();
-        service.register(emailAddress, 'secret', 'nick', 'name')
+        const nick = getRandomNick();
+        service.register(emailAddress, 'secret', nick, 'name')
           .then(function (response) {
+            assert(response);
             assert.equal(response.ok, true);
             assert.isObject(response.user);
             assert.isObject(response.login);
 
             const user = response.user;
             assert.equal(user.email, emailAddress);
-            assert.equal(user.nick, 'nick');
+            assert.equal(user.nick, nick);
             assert.equal(user.name, 'name');
             done();
           });
@@ -113,6 +120,32 @@ describeModule(
                 assert.equal(response.why, 'nick-exists');
                 done();
               });
+          });
+      });
+    });
+
+    describe('createReset()', function () {
+      it('success: returns ok true', function (done) {
+        const emailAddress = getRandomEmailAddress();
+        service.register(emailAddress, 'already forgotten').then(function () {
+          service.logout().then(function () {
+            service.createReset(emailAddress)
+              .then((response) => {
+                assert.equal(response.ok, true);
+                done();
+              });
+          });
+        });
+      });
+
+      it('unknown user: returns ok false and why', function (done) {
+        const emailAddress = getRandomEmailAddress();
+        service.createReset(emailAddress)
+          .then((response) => {
+            console.log(response);
+            assert.equal(response.ok, false);
+            assert.equal(response.why, 'user-not-found');
+            done();
           });
       });
     });

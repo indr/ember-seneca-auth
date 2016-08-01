@@ -108,6 +108,18 @@ describeModule(
         assert.isPromise(service.createReset());
         done();
       });
+
+      it('makes a request to the authCreateResetEndpoint', function (done) {
+        service.createReset('email', 'nick');
+        const a = authClient.lastArgs;
+        assert(a, 'makeRequest was not called');
+        assert.equal(a[0], 'POST');
+        assert.equal(a[1], '/auth/create_reset');
+        assert.equal(a[2], null);
+        assert.equal(a[3].email, 'email');
+        assert.equal(a[3].nick, 'nick');
+        done();
+      });
     });
 
     describe('loadReset()', function () {

@@ -34,12 +34,19 @@ export default Ember.Service.extend({
       nick: nick,
       name: name
     };
+
     return this.get('client')
       .makeRequest('POST', '/auth/register', null, data);
   },
 
-  createReset() {
-    return RSVP.reject();
+  createReset(emailAddress, nick) {
+    const data = {
+      email: emailAddress,
+      nick: nick
+    };
+
+    return this.get('client')
+      .makeRequest('POST', '/auth/create_reset', null, data);
   },
 
   loadReset() {
