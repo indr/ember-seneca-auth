@@ -21,9 +21,12 @@ function start(done) {
   const self = this;
   done = done || noop;
 
+  const options = require('./options') || {};
+  console.log('Options: ', options);
+
   const si = self.seneca = seneca()
     .use('entity')
-    .use('user')
+    .use('user', options.user || {})
     .use('auth')
     .use('web')
     .add('role:api,route:ping', function (args, done) {
@@ -97,6 +100,7 @@ server.start(function () {
     name: 'u1',
     email: 'u1@example.com',
     password: 'pu1',
+    repeat: 'pu1',
     active: true
   });
 });

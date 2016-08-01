@@ -33,9 +33,12 @@ export default Ember.Service.extend({
       delete options.headers;
     }
 
+    console.log('request', options);
+
     return new RSVP.Promise((resolve, reject) => {
       this.jQuery.ajax(options).then((response) => {
         resolve(response);
+        console.log('response', response);
       }, (xhr) => {
         reject(xhr);
       });

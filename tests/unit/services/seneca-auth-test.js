@@ -89,7 +89,7 @@ describeModule(
       });
 
       it('makes a request to the authRegisterEndpoint', function (done) {
-        service.register('email', 'pass', 'nick', 'name');
+        service.register('email', 'pass', 'repeat', 'nick', 'name');
         const a = authClient.lastArgs;
         assert(a, 'makeRequest was not called');
         assert.equal(a[0], 'POST');
@@ -97,6 +97,7 @@ describeModule(
         assert.equal(a[2], null);
         assert.equal(a[3].email, 'email');
         assert.equal(a[3].password, 'pass');
+        assert.equal(a[3].repeat, 'repeat');
         assert.equal(a[3].nick, 'nick');
         assert.equal(a[3].name, 'name');
         done();
@@ -148,7 +149,7 @@ describeModule(
 
       it('makes a request to the authExecuteResetEndpoint', function (done) {
         service.executeReset('token', 'password', 'repeat');
-        const a= authClient.lastArgs;
+        const a = authClient.lastArgs;
         assert(a, 'makeRequest was not called');
         assert.equal(a[0], 'POST');
         assert.equal(a[1], '/auth/execute_reset');
@@ -165,6 +166,20 @@ describeModule(
         assert.isPromise(service.updateUser());
         done();
       });
+
+      it('makes a request to the authUpdateUserEndpoint', function (done) {
+        service.updateUser('newNick', 'oldNick', 'newEmail', 'oldEmail');
+        const a = authClient.lastArgs;
+        assert(a, 'makeRequest was not called');
+        assert.equal(a[0], 'POST');
+        assert.equal(a[1], '/auth/update_user');
+        assert.equal(a[2], null);
+        assert.equal(a[3].nick, 'newNick');
+        assert.equal(a[3].orig_nick, 'oldNick');
+        assert.equal(a[3].email, 'newEmail');
+        assert.equal(a[3].orig_email, 'oldEmail');
+        done();
+      });
     });
 
     describe('changePassword()', function () {
@@ -172,7 +187,18 @@ describeModule(
         assert.isPromise(service.changePassword());
         done();
       });
-    });
 
+      it('makes a request to the authChangePasswordEndpoint', function (done) {
+        service.changePassword('password', 'repeat');
+        const a = authClient.lastArgs;
+        assert(a, 'makeRequest was not called');
+        assert.equal(a[0], 'POST');
+        assert.equal(a[1], '/auth/change_password');
+        assert.equal(a[2], null);
+        assert.equal(a[3].password, 'password');
+        assert.equal(a[3].repeat, 'repeat');
+        done();
+      });
+    });
   }
 );

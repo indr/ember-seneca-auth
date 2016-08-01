@@ -7,19 +7,23 @@
 
       {{#bs-form action="submit"}}
         {{#bs-form-group}}
-            <label class="control-label">Email address</label>
+            <label class="control-label">Email address (email)</label>
           {{bs-input type="text" value=emailAddress}}
         {{/bs-form-group}}
         {{#bs-form-group}}
-            <label class="control-label">Password</label>
+            <label class="control-label">Password (password)</label>
           {{bs-input type="text" value=password}}
         {{/bs-form-group}}
         {{#bs-form-group}}
-            <label class="control-label">Nick</label>
+            <label class="control-label">Repeat password (repeat)</label>
+          {{bs-input type="text" value=repeat}}
+        {{/bs-form-group}}
+        {{#bs-form-group}}
+            <label class="control-label">Nick/username (nick)</label>
           {{bs-input type="text" value=nick}}
         {{/bs-form-group}}
         {{#bs-form-group}}
-            <label class="control-label">Name</label>
+            <label class="control-label">Name/Full name (name)</label>
           {{bs-input type="text" value=name}}
         {{/bs-form-group}}
 

@@ -1,9 +1,5 @@
 import Ember from 'ember';
 
-const {
-  RSVP
-} = Ember;
-
 export default Ember.Service.extend({
   client: Ember.inject.service('seneca-auth-client'),
 
@@ -27,10 +23,11 @@ export default Ember.Service.extend({
       .makeRequest('GET', '/auth/user');
   },
 
-  register(emailAddress, password, nick, name) {
+  register(emailAddress, password, repeat, nick, name) {
     const data = {
       email: emailAddress,
       password: password,
+      repeat: repeat,
       nick: nick,
       name: name
     };
@@ -65,11 +62,25 @@ export default Ember.Service.extend({
       .makeRequest('POST', '/auth/execute_reset', null, data);
   },
 
-  updateUser() {
-    return RSVP.reject();
+  updateUser(newNick, oldNick, newEmailAddress, oldEmailAddress) {
+    const data = {
+      nick: newNick,
+      orig_nick: oldNick,
+      email: newEmailAddress,
+      orig_email: oldEmailAddress
+    };
+
+    return this.get('client')
+      .makeRequest('POST', '/auth/update_user', null, data);
   },
 
-  changePassword() {
-    return RSVP.reject();
+  changePassword(password, repeat) {
+    const data = {
+      password,
+      repeat
+    };
+
+    return this.get('client')
+      .makeRequest('POST', '/auth/change_password', null, data);
   }
 });

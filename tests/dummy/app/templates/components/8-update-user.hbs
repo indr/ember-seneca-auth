@@ -1,0 +1,33 @@
+<div class="row">
+    <div class="col-sm-6">
+        <h2>updateUser()
+            <small>update user data</small>
+        </h2>
+        <p>POST /auth/update_user</p>
+
+      {{#bs-form action="submit"}}
+        {{#bs-form-group}}
+            <label class="control-label">New nick (nick)</label>
+          {{bs-input type="text" value=nick}}
+        {{/bs-form-group}}
+        {{#bs-form-group}}
+            <label class="control-label">Old nick (orig_nick)</label>
+          {{bs-input type="text" value=origNick}}
+        {{/bs-form-group}}
+        {{#bs-form-group}}
+            <label class="control-label">New email address (email)</label>
+          {{bs-input type="text" value=emailAddress}}
+        {{/bs-form-group}}
+        {{#bs-form-group}}
+            <label class="control-label">Old email address (orig_email)</label>
+          {{bs-input type="text" value=origEmailAddress}}
+        {{/bs-form-group}}
+
+        {{#bs-button type="primary" buttonType="submit"}}update user{{/bs-button}}
+        {{#bs-button type="default" buttonType="reset"}}reset{{/bs-button}}
+      {{/bs-form}}
+    </div>
+    <div class="col-sm-6">
+      {{response-view response=response xhr=xhr}}
+    </div>
+</div>

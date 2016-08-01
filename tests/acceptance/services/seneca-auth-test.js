@@ -26,34 +26,6 @@ describeModule(
   function () {
     let service = null;
 
-    function getRandomEmailAddress() {
-      const id = v4().substr(0, 8);
-      return id + '@example.com';
-    }
-
-    function getRandomNick() {
-      return v4().substr(0, 8);
-    }
-
-    function findResetToken() {
-      return new RSVP.Promise((resolve, reject) => {
-        const options = {
-          url: '/ping',
-          data: null,
-          type: 'GET',
-          dataType: 'json',
-          contentType: 'application/json',
-          headers: {}
-        };
-
-        jQuery.ajax(options).then((response) => {
-          resolve(response);
-        }, (xhr) => {
-          reject(xhr);
-        });
-      });
-    }
-
     beforeEach(function () {
       service = this.subject();
     });
@@ -118,7 +90,7 @@ describeModule(
       it('success: it returns a resolving promise with ok true, user and login data', function (done) {
         const emailAddress = getRandomEmailAddress();
         const nick = getRandomNick();
-        service.register(emailAddress, 'secret', nick, 'name')
+        service.register(emailAddress, 'secret', 'secret', nick, 'name')
           .then(function (response) {
             assert(response);
             assert.equal(response.ok, true);
@@ -135,11 +107,11 @@ describeModule(
 
       it('nick exists: returns a resolving promise with ok false and why', function (done) {
         const emailAddress = getRandomEmailAddress();
-        service.register(emailAddress, 'secret')
+        service.register(emailAddress, 'secret', 'secret')
           .then((response) => {
             assert.equal(response.ok, true);
 
-            service.register(emailAddress, 'secret')
+            service.register(emailAddress, 'secret', 'secret')
               .then((response) => {
                 assert.equal(response.ok, false);
                 assert.equal(response.why, 'nick-exists');
@@ -152,7 +124,7 @@ describeModule(
     describe('createReset()', function () {
       it('success: returns ok true', function (done) {
         const emailAddress = getRandomEmailAddress();
-        service.register(emailAddress, 'already forgotten').then(function () {
+        service.register(emailAddress, 'secret', 'secret').then(function () {
           service.logout().then(function () {
             service.createReset(emailAddress)
               .then((response) => {
@@ -256,19 +228,56 @@ describeModule(
       });
     });
 
+    describe('updateUser()', function () {
+      it('is many things except production ready');
+    });
+
+    describe('changePassword()', function () {
+      it('returns "nick_or_email_missing" when called without session token');
+    });
+
+    function getRandomEmailAddress() {
+      const id = v4().substr(0, 8);
+      return id + '@example.com';
+    }
+
+    function getRandomNick() {
+      return v4().substr(0, 8);
+    }
+
     function createAndFindResetToken(emailAddress, done) {
-      service.register(emailAddress).then((response) => {
-        assert.equal(response.ok, true, response.why);
+      service.register(emailAddress, 'secret', 'secret').then((response) => {
+        console.log('register', response);
+        assert.equal(response.ok, true, 'register: ' + response.why);
         service.createReset(emailAddress).then((response) => {
-          assert.equal(response.ok, true, response.why);
+          assert.equal(response.ok, true, 'createReset: ' + response.why);
           findResetToken(emailAddress).then((response) => {
-            assert.equal(response.ok, true, response.why);
+            assert.equal(response.ok, true, 'findResetToken:' + response);
             const token = response.resetToken;
             assert.isString(token);
             assert.isAbove(token.length, 0);
 
             done(null, token);
           });
+        });
+      });
+    }
+
+    function findResetToken() {
+      return new RSVP.Promise((resolve, reject) => {
+        const options = {
+          url: '/ping',
+          data: null,
+          type: 'GET',
+          dataType: 'json',
+          contentType: 'application/json',
+          headers: {}
+        };
+
+        jQuery.ajax(options).then((response) => {
+          resolve(response);
+        }, (xhr) => {
+          reject(xhr);
         });
       });
     }
