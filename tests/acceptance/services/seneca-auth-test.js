@@ -142,9 +142,9 @@ describeModule(
         const emailAddress = getRandomEmailAddress();
         service.createReset(emailAddress)
           .then((response) => {
-            console.log(response);
             assert.equal(response.ok, false);
             assert.equal(response.why, 'user-not-found');
+            assert.equal(response.email, emailAddress);
             done();
           });
       });

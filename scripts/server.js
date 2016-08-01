@@ -1,7 +1,11 @@
 const assert = require('assert');
+const fs = require('fs');
 const seneca = require('seneca');
 const bodyParser = require('body-parser');
 const createApplication = require('express');
+
+const tmpDir = __dirname + '/../tmp';
+const resetTokenUuid = tmpDir + '/resetToken.uuid';
 
 module.export = function () {
   return {
@@ -23,14 +27,21 @@ function start(done) {
     .use('auth')
     .use('web')
     .add('role:api,route:ping', function (args, done) {
-      done(null, {
-        'date': new Date(),
-        'seneca': this.version,
-        'status': 'ok',
-        'ok': true
+      var si = this;
+      fs.readFile(resetTokenUuid, {encoding: 'utf8'}, function (err, resetToken) {
+        if (err) resetToken = err;
+        done(null, {
+          'date': new Date(),
+          'seneca': si.version,
+          'tmpDir': tmpDir,
+          'resetToken': resetToken,
+          'ok': true
+        });
       });
-    })
-    .ready(function (err) {
+    });
+
+
+    si.ready(function (err) {
       assert(!err);
 
       si.act('role:web', {
@@ -46,6 +57,22 @@ function start(done) {
         .use(si.export('web'));
 
       self.app = app.listen(3000);
+
+      si.wrap('role:user,cmd:create_reset', function (args, done) {
+        this.prior(args, function (err, data) {
+          if (err) return done(err, data);
+          if (!data.ok) {
+            return done(null, data);
+          }
+
+          const token = data.reset.token;
+          console.log('Captured reset token: ' + token);
+          fs.writeFile(resetTokenUuid, token, function (err) {
+            if (err) return done(err, data);
+            return done(null, data);
+          });
+        });
+      });
       done();
     });
 }
@@ -64,6 +91,7 @@ function noop() {
 
 const server = module.export();
 server.start(function () {
+  console.log('tmp dir is ' + tmpDir);
   server.seneca.act('role: user, cmd: register', {
     nick: 'nu1',
     name: 'u1',

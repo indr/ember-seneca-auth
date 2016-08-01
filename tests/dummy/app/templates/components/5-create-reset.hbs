@@ -20,5 +20,8 @@
     </div>
     <div class="col-sm-6">
       {{response-view response=response xhr=xhr}}
+        {{#if response.ok}}
+          <div class="alert alert-info">Reset token created. Execute ping to receive it.</div>
+        {{/if}}
     </div>
 </div>
