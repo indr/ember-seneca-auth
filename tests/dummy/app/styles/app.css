@@ -1,0 +1,25 @@
+/* Thank you http://getbootstrap.com/examples/jumbotron-narrow/ */
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.footer {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+/* Custom page footer */
+.footer {
+  margin-top: 19px;
+  padding-top: 19px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+  /* Remove the padding we set earlier */
+  .footer {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
