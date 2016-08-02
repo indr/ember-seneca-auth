@@ -176,11 +176,7 @@ export default Ember.Service.extend({
     }
 
     return new RSVP.Promise((resolve, reject) => {
-      this.jQuery.ajax(options).then((response) => {
-        resolve(response);
-      }, (xhr) => {
-        reject(xhr);
-      });
+      this.jQuery.ajax(options).then(resolve, reject);
     });
   }
 });
