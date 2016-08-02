@@ -29,7 +29,7 @@ export default Ember.Service.extend({
       password: password
     };
 
-    return this._makeRequest('POST', '/auth/login', null, data);
+    return this._makeRequest('/auth/login', 'POST', null, data);
   },
 
   /**
@@ -38,7 +38,7 @@ export default Ember.Service.extend({
    * @public
    */
   logout() {
-    return this._makeRequest('POST', '/auth/logout');
+    return this._makeRequest('/auth/logout', 'POST');
   },
 
   /**
@@ -47,7 +47,7 @@ export default Ember.Service.extend({
    * @public
    */
   user() {
-    return this._makeRequest('GET', '/auth/user');
+    return this._makeRequest('/auth/user', 'GET');
   },
 
   /**
@@ -69,7 +69,7 @@ export default Ember.Service.extend({
       name: name
     };
 
-    return this._makeRequest('POST', '/auth/register', null, data);
+    return this._makeRequest('/auth/register', 'POST', null, data);
   },
 
   /**
@@ -85,7 +85,7 @@ export default Ember.Service.extend({
       nick: nick
     };
 
-    return this._makeRequest('POST', '/auth/create_reset', null, data);
+    return this._makeRequest('/auth/create_reset', 'POST', null, data);
   },
 
   /**
@@ -95,7 +95,7 @@ export default Ember.Service.extend({
    * @public
    */
   loadReset(token) {
-    return this._makeRequest('POST', '/auth/load_reset', null, {token});
+    return this._makeRequest('/auth/load_reset', 'POST', null, {token});
   },
 
   /**
@@ -113,7 +113,7 @@ export default Ember.Service.extend({
       repeat
     };
 
-    return this._makeRequest('POST', '/auth/execute_reset', null, data);
+    return this._makeRequest('/auth/execute_reset', 'POST', null, data);
   },
 
   /**
@@ -133,7 +133,7 @@ export default Ember.Service.extend({
       orig_email: oldEmailAddress
     };
 
-    return this._makeRequest('POST', '/auth/update_user', null, data);
+    return this._makeRequest('/auth/update_user', 'POST', null, data);
   },
 
   /**
@@ -149,29 +149,19 @@ export default Ember.Service.extend({
       repeat
     };
 
-    return this._makeRequest('POST', '/auth/change_password', null, data);
+    return this._makeRequest('/auth/change_password', 'POST', null, data);
   },
 
   /**
-   * @method makeRequest
-   * @param {String} type
+   * @method _makeRequest
    * @param {String} url
+   * @param {String} [type='GET']
    * @param {Object} [headers={}]
    * @param {Object} [data=null]
    * @return {Ember.RSVP.Promise}
    * @private
    */
-  _makeRequest(type, url, headers = {}, data = null) {
-    if (!type) {
-      throw new Error('type must be provided');
-    }
-    if (!url) {
-      throw new Error('url must be provided');
-    }
-    if (url === '/') {
-      throw new Error('url must not be root index. This causes ember-cli or mocha to throw some weird beforeEach/afterEach hook exceptions');
-    }
-
+  _makeRequest(url, type = 'GET', headers = {}, data = null) {
     const options = {
       url,
       data: data != null ? JSON.stringify(data) : null,
