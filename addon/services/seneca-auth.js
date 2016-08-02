@@ -19,8 +19,8 @@ export default Ember.Service.extend({
    */
   login(identification, password) {
     const data = {
-      identification,
-      password
+      username: identification,
+      password: password
     };
 
     return this.get('client')

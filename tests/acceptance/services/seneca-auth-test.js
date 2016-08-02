@@ -247,7 +247,7 @@ describeModule(
 
     function createAndFindResetToken(emailAddress, done) {
       service.register(emailAddress, 'secret', 'secret').then((response) => {
-        console.log('register', response);
+        // console.log('register', response);
         assert.equal(response.ok, true, 'register: ' + response.why);
         service.createReset(emailAddress).then((response) => {
           assert.equal(response.ok, true, 'createReset: ' + response.why);
