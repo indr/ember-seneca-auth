@@ -6,8 +6,10 @@ export default FeatureBase.extend({
 
   actions: {
     submit() {
+      const data = this.getCustomData();
+
       this.handleResult(
-        this.get('senecaAuth').logout());
+        this.get('senecaAuth').logout(data));
     }
   }
 });

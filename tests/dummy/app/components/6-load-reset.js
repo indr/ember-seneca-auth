@@ -7,9 +7,10 @@ export default FeatureBase.extend({
   actions: {
     submit() {
       const {token} = this.getProperties('token');
+      const data = this.getCustomData();
 
       this.handleResult(
-        this.get('senecaAuth').loadReset(token));
+        this.get('senecaAuth').loadReset(token, data));
     }
   }
 });

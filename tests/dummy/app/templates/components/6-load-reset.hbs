@@ -10,6 +10,7 @@
             <label class="control-label">Reset token (token)</label>
           {{bs-input type="text" value=token}}
         {{/bs-form-group}}
+        {{custom-json customData=customData}}
 
         {{#bs-button type="primary" buttonType="submit"}}load reset{{/bs-button}}
         {{#bs-button type="default" buttonType="reset"}}reset{{/bs-button}}

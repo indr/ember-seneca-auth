@@ -6,6 +6,8 @@
         <p>POST /auth/logout</p>
 
       {{#bs-form action="submit"}}
+        {{custom-json customData=customData}}
+
         {{#bs-button type="primary" buttonType="submit"}}logout{{/bs-button}}
       {{/bs-form}}
     </div>

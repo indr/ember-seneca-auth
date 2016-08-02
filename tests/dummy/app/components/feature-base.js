@@ -5,8 +5,14 @@ export default Ember.Component.extend({
   layout,
   senecaAuth: Ember.inject.service(),
 
+  customData: '{}',
   response: null,
   xhr: null,
+
+  getCustomData() {
+    const data = this.get('customData');
+    return Ember.isBlank(data) ? null : JSON.parse(data);
+  },
 
   handleResult(promise) {
     const self = this;

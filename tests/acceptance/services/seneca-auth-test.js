@@ -132,9 +132,7 @@ describeModule(
         };
         service.register(emailAddress, 'secret', 'secret', nick, 'name', a)
           .then((response) => {
-            console.log(response);
             assert.equal(response.ok, true);
-
             assert.equal(response.user.attrs.a1, 'v1');
             assert.equal(response.user.attrs.a2, 'v2');
             done();

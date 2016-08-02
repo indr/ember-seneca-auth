@@ -20,25 +20,27 @@ export default Ember.Service.extend({
    * @method login
    * @param {String} identification
    * @param {String} password
+   * @param {Object} [data={}] Object that gets assign to the payload
    * @return {Ember.RSVP.Promise}
    * @public
    */
-  login(identification, password) {
-    const data = {
+  login(identification, password, data = {}) {
+    data = Ember.assign({
       username: identification,
       password: password
-    };
+    }, data);
 
     return this._makeRequest('/auth/login', 'POST', null, data);
   },
 
   /**
    * @method logout
+   * @param {Object} [data={}] Object that gets assign to the payload
    * @return {Ember.RSVP.Promise}
    * @public
    */
-  logout() {
-    return this._makeRequest('/auth/logout', 'POST');
+  logout(data = {}) {
+    return this._makeRequest('/auth/logout', 'POST', null, data);
   },
 
   /**
@@ -57,7 +59,7 @@ export default Ember.Service.extend({
    * @param {String} repeat
    * @param {String} nick
    * @param {String} name
-   * @param {Object} [data={}]
+   * @param {Object} [data={}] Object that gets assign to the payload
    * @return {Ember.RSVP.Promise}
    * @public
    */
@@ -77,14 +79,15 @@ export default Ember.Service.extend({
    * @method createReset
    * @param {String} emailAddress
    * @param {String} nick
+   * @param {Object} [data={}] Object that gets assign to the payload
    * @return {Ember.RSVP.Promise}
    * @public
    */
-  createReset(emailAddress, nick) {
-    const data = {
+  createReset(emailAddress, nick, data = {}) {
+    data = Ember.assign({
       email: emailAddress,
       nick: nick
-    };
+    }, data);
 
     return this._makeRequest('/auth/create_reset', 'POST', null, data);
   },
@@ -92,11 +95,16 @@ export default Ember.Service.extend({
   /**
    * @method loadReset
    * @param {String} token
+   * @param {Object} [data={}] Object that gets assign to the payload
    * @return {Ember.RSVP.Promise}
    * @public
    */
-  loadReset(token) {
-    return this._makeRequest('/auth/load_reset', 'POST', null, {token});
+  loadReset(token, data) {
+    data = Ember.assign({
+      token: token
+    }, data);
+
+    return this._makeRequest('/auth/load_reset', 'POST', null, data);
   },
 
   /**
@@ -104,15 +112,16 @@ export default Ember.Service.extend({
    * @param {String} token
    * @param {String} password
    * @param {String} repeat
+   * @param {Object} [data={}] Object that gets assign to the payload
    * @return {Ember.RSVP.Promise}
    * @public
    */
-  executeReset(token, password, repeat) {
-    const data = {
+  executeReset(token, password, repeat, data) {
+    data = Ember.assign({
       token,
       password,
       repeat
-    };
+    }, data);
 
     return this._makeRequest('/auth/execute_reset', 'POST', null, data);
   },
@@ -123,16 +132,17 @@ export default Ember.Service.extend({
    * @param {String} oldNick
    * @param {String} newEmailAddress
    * @param {String} oldEmailAddress
+   * @param {Object} [data={}] Object that gets assign to the payload
    * @return {Ember.RSVP.Promise}
    * @public
    */
-  updateUser(newNick, oldNick, newEmailAddress, oldEmailAddress) {
-    const data = {
+  updateUser(newNick, oldNick, newEmailAddress, oldEmailAddress, data) {
+    data = Ember.assign({
       nick: newNick,
       orig_nick: oldNick,
       email: newEmailAddress,
       orig_email: oldEmailAddress
-    };
+    }, data);
 
     return this._makeRequest('/auth/update_user', 'POST', null, data);
   },
@@ -141,14 +151,15 @@ export default Ember.Service.extend({
    * @method changePassword
    * @param {String} password
    * @param {String} repeat
+   * @param {Object} [data={}] Object that gets assign to the payload
    * @return {Ember.RSVP.Promise}
    * @public
    */
-  changePassword(password, repeat) {
-    const data = {
+  changePassword(password, repeat, data) {
+    data = Ember.assign({
       password,
       repeat
-    };
+    }, data);
 
     return this._makeRequest('/auth/change_password', 'POST', null, data);
   },

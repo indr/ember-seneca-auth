@@ -8,9 +8,10 @@ export default FeatureBase.extend({
     submit() {
       const {nick, origNick, emailAddress, origEmailAddress}
         = this.getProperties('nick', 'origNick', 'emailAddress', 'origEmailAddress');
+      const data = this.getCustomData();
 
       this.handleResult(
-        this.get('senecaAuth').updateUser(nick, origNick, emailAddress, origEmailAddress));
+        this.get('senecaAuth').updateUser(nick, origNick, emailAddress, origEmailAddress, data));
     }
   }
 });

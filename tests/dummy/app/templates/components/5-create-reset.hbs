@@ -14,6 +14,7 @@
             <label class="control-label">Nick (nick)</label>
           {{bs-input type="text" value=nick}}
         {{/bs-form-group}}
+        {{custom-json customData=customData}}
 
         {{#bs-button type="primary" buttonType="submit"}}create reset{{/bs-button}}
         {{#bs-button type="default" buttonType="reset"}}reset{{/bs-button}}

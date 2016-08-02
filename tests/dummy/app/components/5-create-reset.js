@@ -7,9 +7,10 @@ export default FeatureBase.extend({
   actions: {
     submit() {
       const {emailAddress, nick} = this.getProperties('emailAddress', 'nick');
+      const data = this.getCustomData();
 
       this.handleResult(
-        this.get('senecaAuth').createReset(emailAddress, nick));
+        this.get('senecaAuth').createReset(emailAddress, nick, data));
     }
   }
 });

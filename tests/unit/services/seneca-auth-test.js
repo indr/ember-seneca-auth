@@ -48,11 +48,12 @@ describeModule(
       });
 
       it('makes a request to the authLoginEndpoint', function (done) {
-        service.login('user', 'pass').then(function () {
+        service.login('user', 'pass', {a: 'b'}).then(function () {
           assert.equal(o.type, 'POST');
           assert.equal(o.url, '/auth/login');
           assert.equal(d.username, 'user');
           assert.equal(d.password, 'pass');
+          assert.equal(d.a, 'b');
           done();
         });
       });
@@ -65,9 +66,10 @@ describeModule(
       });
 
       it('makes a request to the authLogoutEndpoint', function (done) {
-        service.logout().then(function () {
+        service.logout({a: 'b'}).then(function () {
           assert.equal(o.type, 'POST');
           assert.equal(o.url, '/auth/logout');
+          assert.equal(d.a, 'b');
           done();
         });
       });
@@ -107,19 +109,17 @@ describeModule(
           done();
         });
       });
-    });
 
-    describe('register() with custom attributes', function () {
-      const data = {
-        nick: 'nick2',
-        c1: 'v1',
-        c2: {
-          c21: 'v21',
-          c22: 'v22'
-        }
-      };
       it('puts custom attributes in request data', function (done) {
-        service.register('email', 'pass', 'repeat', 'nick', 'name', data).then(function () {
+        const customData = {
+          nick: 'nick2',
+          c1: 'v1',
+          c2: {
+            c21: 'v21',
+            c22: 'v22'
+          }
+        };
+        service.register('email', 'pass', 'repeat', 'nick', 'name', customData).then(function () {
           assert.equal(d.email, 'email');
           assert.equal(d.nick, 'nick2');
           assert.equal(d.c1, 'v1');
@@ -137,12 +137,13 @@ describeModule(
       });
 
       it('makes a request to the authCreateResetEndpoint', function (done) {
-        service.createReset('email', 'nick').then(function () {
+        service.createReset('email', 'nick', {a: 'b'}).then(function () {
           assert.equal(o.type, 'POST');
           assert.equal(o.url, '/auth/create_reset');
           assert.equal(o.headers, null);
           assert.equal(d.email, 'email');
           assert.equal(d.nick, 'nick');
+          assert.equal(d.a, 'b');
           done();
         });
       });
@@ -155,11 +156,12 @@ describeModule(
       });
 
       it('makes a request to the authLoadResetEndpoint', function (done) {
-        service.loadReset('token').then(function () {
+        service.loadReset('token', {a: 'b'}).then(function () {
           assert.equal(o.type, 'POST');
           assert.equal(o.url, '/auth/load_reset');
           assert.equal(o.headers, null);
           assert.equal(d.token, 'token');
+          assert.equal(d.a, 'b');
           done();
         });
       });
@@ -172,13 +174,14 @@ describeModule(
       });
 
       it('makes a request to the authExecuteResetEndpoint', function (done) {
-        service.executeReset('token', 'password', 'repeat').then(function () {
+        service.executeReset('token', 'password', 'repeat', {a: 'b'}).then(function () {
           assert.equal(o.type, 'POST');
           assert.equal(o.url, '/auth/execute_reset');
           assert.equal(o.headers, null);
           assert.equal(d.token, 'token');
           assert.equal(d.password, 'password');
           assert.equal(d.repeat, 'repeat');
+          assert.equal(d.a, 'b');
           done();
         });
       });
@@ -191,7 +194,7 @@ describeModule(
       });
 
       it('makes a request to the authUpdateUserEndpoint', function (done) {
-        service.updateUser('newNick', 'oldNick', 'newEmail', 'oldEmail').then(function () {
+        service.updateUser('newNick', 'oldNick', 'newEmail', 'oldEmail', {a: 'b'}).then(function () {
           assert.equal(o.type, 'POST');
           assert.equal(o.url, '/auth/update_user');
           assert.equal(o.headers, null);
@@ -199,6 +202,7 @@ describeModule(
           assert.equal(d.orig_nick, 'oldNick');
           assert.equal(d.email, 'newEmail');
           assert.equal(d.orig_email, 'oldEmail');
+          assert.equal(d.a, 'b');
           done();
         });
       });
@@ -211,12 +215,13 @@ describeModule(
       });
 
       it('makes a request to the authChangePasswordEndpoint', function (done) {
-        service.changePassword('password', 'repeat').then(function () {
+        service.changePassword('password', 'repeat', {a: 'b'}).then(function () {
           assert.equal(o.type, 'POST');
           assert.equal(o.url, '/auth/change_password');
           assert.equal(o.headers, null);
           assert.equal(d.password, 'password');
           assert.equal(d.repeat, 'repeat');
+          assert.equal(d.a, 'b');
           done();
         });
       });

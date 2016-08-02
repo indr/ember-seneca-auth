@@ -18,6 +18,7 @@
             <label class="control-label">Repeat new password (repeat)</label>
           {{bs-input type="text" value=repeat}}
         {{/bs-form-group}}
+        {{custom-json customData=customData}}
 
         {{#bs-button type="primary" buttonType="submit"}}execute reset{{/bs-button}}
         {{#bs-button type="default" buttonType="reset"}}reset{{/bs-button}}

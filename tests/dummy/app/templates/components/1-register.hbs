@@ -26,6 +26,7 @@
             <label class="control-label">Name/Full name (name)</label>
           {{bs-input type="text" value=name}}
         {{/bs-form-group}}
+        {{custom-json customData=customData}}
 
         {{#bs-button type="primary" buttonType="submit"}}register{{/bs-button}}
         {{#bs-button type="default" buttonType="reset"}}reset{{/bs-button}}
