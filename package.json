@@ -12,7 +12,7 @@
     "pretest": "scripts/start-server.sh",
     "test": "ember try:each",
     "posttest": "scripts/stop-server.sh",
-    "preversion": "scripts/api.sh"
+    "postversion": "scripts/api.sh"
   },
   "repository": {
     "type": "git",
