@@ -7,10 +7,10 @@
 [![dependencies Status](https://david-dm.org/indr/ember-seneca-auth/status.svg)](https://david-dm.org/indr/ember-seneca-auth)
 [![Code Climate](https://codeclimate.com/github/indr/ember-seneca-auth/badges/gpa.svg)](https://codeclimate.com/github/indr/ember-seneca-auth)
 
-This ember addon provides two features:
+This Ember addon provides two features:
 
-* An [ember-simple-auth](http://ember-simple-auth.com/) authenticator
 * A service for the [seneca-auth](https://github.com/senecajs/seneca-auth) API
+* An [ember-simple-auth](http://ember-simple-auth.com/) authenticator
 
 `ember-simple-auth` is not part of this addon. It won't be installed to your Ember app.
 
@@ -36,7 +36,7 @@ This addon ist tested against the `release`, `beta`, `canary` channels and versi
 
 ## Usage
 
-Usage is simple. Use the ember-simple-auth authenticator or inject the `senecaAuth` service and use the methods which resembles the seneca-auth API.
+Usage is simple. Use the `seneca` ember-simple-auth authenticator or inject the `senecaAuth` service and use the methods which resembles the seneca-auth API.
 
 ### ember-simple-auth authenticator
 
@@ -72,23 +72,17 @@ export default Ember.Component.extend({
 
 ### Examples
 
- * Look at the [acceptance tests](https://github.com/indr/ember-seneca-auth/blob/master/tests/acceptance/services/seneca-auth-test.js)
+ * [Install](#Installation) and (run)[#Running Dummy App] the dummy app.
+ * `seneca-auth` [acceptance tests](https://github.com/indr/ember-seneca-auth/blob/master/tests/acceptance/services/seneca-auth-test.js)
    They use a real seneca backend. Have a look at the seneca server in the [scripts folder](https://github.com/indr/ember-seneca-auth/tree/master/scripts).
- * [indr/addressbook-ember](https://github.com/indr/addressbook/ember)
 
-## API methods
+## API
 
-The [seneca-auth service](https://github.com/indr/ember-seneca-auth/blob/master/addon/services/seneca-auth.js) provides methods according to the [seneca-auth API](https://github.com/senecajs/seneca-auth#api)
+The `[seneca-auth](API.md#module_seneca-auth)` service provides methods according to the [seneca-auth API](https://github.com/senecajs/seneca-auth#api).
 
- * `senecaAuth.login(username, password)`
- * `senecaAuth.logout()`
- * `senecaAuth.user()`
- * `senecaAuth.register(emailAddress, password)`
- * `senecaAuth.createReset()` (tbd)
- * `senecaAuth.loadReset()` (tbd)
- * `senecaAuth.executeReset()` (tbd)
- * `senecaAuth.updateUser()` (tbd)
- * `senecaAuth.changePassword()` (tbd)
+The `[seneca](API.md#module_seneca)` authenticator implements the methods specified by ember-simple-auth's [BaseAuthenticator](http://ember-simple-auth.com/api/classes/BaseAuthenticator.html).
+
+See [API](API.md) for more details.
 
 ## License
 
@@ -100,7 +94,7 @@ The [seneca-auth service](https://github.com/indr/ember-seneca-auth/blob/master/
 * `npm install`
 * `bower install`
 
-## Running
+## Running Dummy App
 
 * `./scripts/start-server.sh`
 * `ember serve --proxy http://localhost:3000`
