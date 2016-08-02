@@ -57,17 +57,18 @@ export default Ember.Service.extend({
    * @param {String} repeat
    * @param {String} nick
    * @param {String} name
+   * @param {Object} [data={}]
    * @return {Ember.RSVP.Promise}
    * @public
    */
-  register(emailAddress, password, repeat, nick, name) {
-    const data = {
+  register(emailAddress, password, repeat, nick, name, data = {}) {
+    data = Ember.assign({
       email: emailAddress,
       password: password,
       repeat: repeat,
       nick: nick,
       name: name
-    };
+    }, data);
 
     return this._makeRequest('/auth/register', 'POST', null, data);
   },

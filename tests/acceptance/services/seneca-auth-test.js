@@ -121,6 +121,27 @@ describeModule(
       });
     });
 
+    describe('register() with custom attribtes', function () {
+      it('should return user with attributes specified', function (done) {
+        const {emailAddress, nick} = getRandomEmailAddressAndNick();
+        const a = {
+          attrs: {
+            a1: 'v1',
+            a2: 'v2'
+          }
+        };
+        service.register(emailAddress, 'secret', 'secret', nick, 'name', a)
+          .then((response) => {
+            console.log(response);
+            assert.equal(response.ok, true);
+
+            assert.equal(response.user.attrs.a1, 'v1');
+            assert.equal(response.user.attrs.a2, 'v2');
+            done();
+          });
+      });
+    });
+
     describe('createReset()', function () {
       it('success: returns ok true', function (done) {
         const emailAddress = getRandomEmailAddress();
@@ -243,6 +264,13 @@ describeModule(
 
     function getRandomNick() {
       return v4().substr(0, 8);
+    }
+
+    function getRandomEmailAddressAndNick() {
+      return {
+        emailAddress: getRandomEmailAddress(),
+        nick: getRandomNick()
+      };
     }
 
     function createAndFindResetToken(emailAddress, done) {

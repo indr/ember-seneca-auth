@@ -109,6 +109,27 @@ describeModule(
       });
     });
 
+    describe('register() with custom attributes', function () {
+      const data = {
+        nick: 'nick2',
+        c1: 'v1',
+        c2: {
+          c21: 'v21',
+          c22: 'v22'
+        }
+      };
+      it('puts custom attributes in request data', function (done) {
+        service.register('email', 'pass', 'repeat', 'nick', 'name', data).then(function () {
+          assert.equal(d.email, 'email');
+          assert.equal(d.nick, 'nick2');
+          assert.equal(d.c1, 'v1');
+          assert.equal(d.c2.c21, 'v21');
+          assert.equal(d.c2.c22, 'v22');
+          done();
+        });
+      });
+    });
+
     describe('createReset()', function () {
       it('returns a promise', function (done) {
         assert.isPromise(service.createReset());
