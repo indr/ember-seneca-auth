@@ -1,0 +1,16 @@
+{
+  "name": "ember-seneca-auth",
+  "description": "Senecajs' seneca-auth api client and authenticator for ember-simple-auth",
+  "version": "0.0.1",
+  "options": {
+    "paths": [
+      "addon"
+    ],
+    "exclude": "vendor",
+    "outdir": "docs",
+    "linkNatives": true,
+    "quiet": false,
+    "parseOnly": false,
+    "lint": false
+  }
+}

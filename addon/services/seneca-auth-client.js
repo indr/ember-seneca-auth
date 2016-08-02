@@ -6,9 +6,23 @@ const {
   $
 } = Ember;
 
+/**
+ * @class seneca-auth-client
+ * @namespace services
+ * @module ember-seneca-auth
+ */
 export default Ember.Service.extend({
   jQuery: $,
 
+  /**
+   * @method makeRequest
+   * @param {String} type
+   * @param {String} url
+   * @param {Object} [headers={}]
+   * @param {Object} [data=null]
+   * @return {Ember.RSVP.Promise}
+   * @public
+   */
   makeRequest(type, url, headers = {}, data = null) {
     if (!type) {
       throw new Error('type must be provided');
@@ -33,12 +47,9 @@ export default Ember.Service.extend({
       delete options.headers;
     }
 
-    console.log('request', options);
-
     return new RSVP.Promise((resolve, reject) => {
       this.jQuery.ajax(options).then((response) => {
         resolve(response);
-        console.log('response', response);
       }, (xhr) => {
         reject(xhr);
       });
