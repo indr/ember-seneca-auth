@@ -18,17 +18,27 @@ describeModule(
     // needs: ['service:foo']
   },
   function () {
-    let service = null;
-    let authClient = null;
+    let service = null,
+      jQueryMock = null,
+      o = null, // jQuery.ajax options
+      d = null; // parsed options data
 
     beforeEach(function () {
-      service = this.subject();
-      service.client = authClient = {
-        makeRequest: function () {
-          this.lastArgs = Ember.A(arguments);
-          return Ember.RSVP.reject();
+      jQueryMock = {
+        ajax: function ajax() {
+          this.ajax.lastArgs = Ember.A(arguments);
+          o = arguments[0];
+          d = JSON.parse(o.data);
+          return {
+            then: function (resolve) {
+              resolve();
+            }
+          };
         }
       };
+
+      service = this.subject();
+      service.jQuery = jQueryMock;
     });
 
     describe('login()', function () {
@@ -38,15 +48,13 @@ describeModule(
       });
 
       it('makes a request to the authLoginEndpoint', function (done) {
-        service.login('user', 'pass');
-        const a = authClient.lastArgs;
-        assert(a, 'makeRequest was not called');
-        assert.equal(a[0], 'POST');
-        assert.equal(a[1], '/auth/login');
-        assert.equal(a[2], null);
-        assert.equal(a[3].username, 'user');
-        assert.equal(a[3].password, 'pass');
-        done();
+        service.login('user', 'pass').then(function () {
+          assert.equal(o.type, 'POST');
+          assert.equal(o.url, '/auth/login');
+          assert.equal(d.username, 'user');
+          assert.equal(d.password, 'pass');
+          done();
+        });
       });
     });
 
@@ -57,12 +65,11 @@ describeModule(
       });
 
       it('makes a request to the authLogoutEndpoint', function (done) {
-        service.logout();
-        const a = authClient.lastArgs;
-        assert(a, 'makeRequest was not called');
-        assert.equal(a[0], 'POST');
-        assert.equal(a[1], '/auth/logout');
-        done();
+        service.logout().then(function () {
+          assert.equal(o.type, 'POST');
+          assert.equal(o.url, '/auth/logout');
+          done();
+        });
       });
     });
 
@@ -73,12 +80,11 @@ describeModule(
       });
 
       it('makes a request to the authUserEndpoint', function (done) {
-        service.user();
-        const a = authClient.lastArgs;
-        assert(a, 'makeRequest was not called');
-        assert.equal(a[0], 'GET');
-        assert.equal(a[1], '/auth/user');
-        done();
+        service.user().then(function () {
+          assert.equal(o.type, 'GET');
+          assert.equal(o.url, '/auth/user');
+          done();
+        });
       });
     });
 
@@ -89,18 +95,17 @@ describeModule(
       });
 
       it('makes a request to the authRegisterEndpoint', function (done) {
-        service.register('email', 'pass', 'repeat', 'nick', 'name');
-        const a = authClient.lastArgs;
-        assert(a, 'makeRequest was not called');
-        assert.equal(a[0], 'POST');
-        assert.equal(a[1], '/auth/register');
-        assert.equal(a[2], null);
-        assert.equal(a[3].email, 'email');
-        assert.equal(a[3].password, 'pass');
-        assert.equal(a[3].repeat, 'repeat');
-        assert.equal(a[3].nick, 'nick');
-        assert.equal(a[3].name, 'name');
-        done();
+        service.register('email', 'pass', 'repeat', 'nick', 'name').then(function () {
+          assert.equal(o.type, 'POST');
+          assert.equal(o.url, '/auth/register');
+          assert.equal(o.headers, null);
+          assert.equal(d.email, 'email');
+          assert.equal(d.password, 'pass');
+          assert.equal(d.repeat, 'repeat');
+          assert.equal(d.nick, 'nick');
+          assert.equal(d.name, 'name');
+          done();
+        });
       });
     });
 
@@ -111,15 +116,14 @@ describeModule(
       });
 
       it('makes a request to the authCreateResetEndpoint', function (done) {
-        service.createReset('email', 'nick');
-        const a = authClient.lastArgs;
-        assert(a, 'makeRequest was not called');
-        assert.equal(a[0], 'POST');
-        assert.equal(a[1], '/auth/create_reset');
-        assert.equal(a[2], null);
-        assert.equal(a[3].email, 'email');
-        assert.equal(a[3].nick, 'nick');
-        done();
+        service.createReset('email', 'nick').then(function () {
+          assert.equal(o.type, 'POST');
+          assert.equal(o.url, '/auth/create_reset');
+          assert.equal(o.headers, null);
+          assert.equal(d.email, 'email');
+          assert.equal(d.nick, 'nick');
+          done();
+        });
       });
     });
 
@@ -130,14 +134,13 @@ describeModule(
       });
 
       it('makes a request to the authLoadResetEndpoint', function (done) {
-        service.loadReset('token');
-        const a = authClient.lastArgs;
-        assert(a, 'makeRequest was not called');
-        assert.equal(a[0], 'POST');
-        assert.equal(a[1], '/auth/load_reset');
-        assert.equal(a[2], null);
-        assert.equal(a[3].token, 'token');
-        done();
+        service.loadReset('token').then(function () {
+          assert.equal(o.type, 'POST');
+          assert.equal(o.url, '/auth/load_reset');
+          assert.equal(o.headers, null);
+          assert.equal(d.token, 'token');
+          done();
+        });
       });
     });
 
@@ -148,16 +151,15 @@ describeModule(
       });
 
       it('makes a request to the authExecuteResetEndpoint', function (done) {
-        service.executeReset('token', 'password', 'repeat');
-        const a = authClient.lastArgs;
-        assert(a, 'makeRequest was not called');
-        assert.equal(a[0], 'POST');
-        assert.equal(a[1], '/auth/execute_reset');
-        assert.equal(a[2], null);
-        assert.equal(a[3].token, 'token');
-        assert.equal(a[3].password, 'password');
-        assert.equal(a[3].repeat, 'repeat');
-        done();
+        service.executeReset('token', 'password', 'repeat').then(function () {
+          assert.equal(o.type, 'POST');
+          assert.equal(o.url, '/auth/execute_reset');
+          assert.equal(o.headers, null);
+          assert.equal(d.token, 'token');
+          assert.equal(d.password, 'password');
+          assert.equal(d.repeat, 'repeat');
+          done();
+        });
       });
     });
 
@@ -168,17 +170,16 @@ describeModule(
       });
 
       it('makes a request to the authUpdateUserEndpoint', function (done) {
-        service.updateUser('newNick', 'oldNick', 'newEmail', 'oldEmail');
-        const a = authClient.lastArgs;
-        assert(a, 'makeRequest was not called');
-        assert.equal(a[0], 'POST');
-        assert.equal(a[1], '/auth/update_user');
-        assert.equal(a[2], null);
-        assert.equal(a[3].nick, 'newNick');
-        assert.equal(a[3].orig_nick, 'oldNick');
-        assert.equal(a[3].email, 'newEmail');
-        assert.equal(a[3].orig_email, 'oldEmail');
-        done();
+        service.updateUser('newNick', 'oldNick', 'newEmail', 'oldEmail').then(function () {
+          assert.equal(o.type, 'POST');
+          assert.equal(o.url, '/auth/update_user');
+          assert.equal(o.headers, null);
+          assert.equal(d.nick, 'newNick');
+          assert.equal(d.orig_nick, 'oldNick');
+          assert.equal(d.email, 'newEmail');
+          assert.equal(d.orig_email, 'oldEmail');
+          done();
+        });
       });
     });
 
@@ -189,15 +190,14 @@ describeModule(
       });
 
       it('makes a request to the authChangePasswordEndpoint', function (done) {
-        service.changePassword('password', 'repeat');
-        const a = authClient.lastArgs;
-        assert(a, 'makeRequest was not called');
-        assert.equal(a[0], 'POST');
-        assert.equal(a[1], '/auth/change_password');
-        assert.equal(a[2], null);
-        assert.equal(a[3].password, 'password');
-        assert.equal(a[3].repeat, 'repeat');
-        done();
+        service.changePassword('password', 'repeat').then(function () {
+          assert.equal(o.type, 'POST');
+          assert.equal(o.url, '/auth/change_password');
+          assert.equal(o.headers, null);
+          assert.equal(d.password, 'password');
+          assert.equal(d.repeat, 'repeat');
+          done();
+        });
       });
     });
   }

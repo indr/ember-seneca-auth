@@ -21,7 +21,7 @@ describeModule(
   'Acceptance | SenecaAuthService',
   {
     // Specify the other units that are required for this test.
-    needs: ['service:seneca-auth-client']
+    // needs: ['service:foo']
   },
   function () {
     let service = null;

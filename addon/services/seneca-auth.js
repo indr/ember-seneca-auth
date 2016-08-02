@@ -1,5 +1,11 @@
 import Ember from 'ember';
 
+const {
+  isEmpty,
+  RSVP,
+  $
+} = Ember;
+
 /**
  * The ember-simple-auth authenticator
  *
@@ -8,7 +14,7 @@ import Ember from 'ember';
  * @module ember-seneca-auth
  */
 export default Ember.Service.extend({
-  client: Ember.inject.service('seneca-auth-client'),
+  jQuery: $,
 
   /**
    * @method login
@@ -23,8 +29,7 @@ export default Ember.Service.extend({
       password: password
     };
 
-    return this.get('client')
-      .makeRequest('POST', '/auth/login', null, data);
+    return this._makeRequest('POST', '/auth/login', null, data);
   },
 
   /**
@@ -33,8 +38,7 @@ export default Ember.Service.extend({
    * @public
    */
   logout() {
-    return this.get('client')
-      .makeRequest('POST', '/auth/logout');
+    return this._makeRequest('POST', '/auth/logout');
   },
 
   /**
@@ -43,8 +47,7 @@ export default Ember.Service.extend({
    * @public
    */
   user() {
-    return this.get('client')
-      .makeRequest('GET', '/auth/user');
+    return this._makeRequest('GET', '/auth/user');
   },
 
   /**
@@ -66,8 +69,7 @@ export default Ember.Service.extend({
       name: name
     };
 
-    return this.get('client')
-      .makeRequest('POST', '/auth/register', null, data);
+    return this._makeRequest('POST', '/auth/register', null, data);
   },
 
   /**
@@ -83,8 +85,7 @@ export default Ember.Service.extend({
       nick: nick
     };
 
-    return this.get('client')
-      .makeRequest('POST', '/auth/create_reset', null, data);
+    return this._makeRequest('POST', '/auth/create_reset', null, data);
   },
 
   /**
@@ -94,8 +95,7 @@ export default Ember.Service.extend({
    * @public
    */
   loadReset(token) {
-    return this.get('client')
-      .makeRequest('POST', '/auth/load_reset', null, {token});
+    return this._makeRequest('POST', '/auth/load_reset', null, {token});
   },
 
   /**
@@ -113,8 +113,7 @@ export default Ember.Service.extend({
       repeat
     };
 
-    return this.get('client')
-      .makeRequest('POST', '/auth/execute_reset', null, data);
+    return this._makeRequest('POST', '/auth/execute_reset', null, data);
   },
 
   /**
@@ -134,8 +133,7 @@ export default Ember.Service.extend({
       orig_email: oldEmailAddress
     };
 
-    return this.get('client')
-      .makeRequest('POST', '/auth/update_user', null, data);
+    return this._makeRequest('POST', '/auth/update_user', null, data);
   },
 
   /**
@@ -151,7 +149,48 @@ export default Ember.Service.extend({
       repeat
     };
 
-    return this.get('client')
-      .makeRequest('POST', '/auth/change_password', null, data);
+    return this._makeRequest('POST', '/auth/change_password', null, data);
+  },
+
+  /**
+   * @method makeRequest
+   * @param {String} type
+   * @param {String} url
+   * @param {Object} [headers={}]
+   * @param {Object} [data=null]
+   * @return {Ember.RSVP.Promise}
+   * @private
+   */
+  _makeRequest(type, url, headers = {}, data = null) {
+    if (!type) {
+      throw new Error('type must be provided');
+    }
+    if (!url) {
+      throw new Error('url must be provided');
+    }
+    if (url === '/') {
+      throw new Error('url must not be root index. This causes ember-cli or mocha to throw some weird beforeEach/afterEach hook exceptions');
+    }
+
+    const options = {
+      url,
+      data: data != null ? JSON.stringify(data) : null,
+      type: type,
+      dataType: 'json',
+      contentType: 'application/json',
+      headers: headers || {}
+    };
+
+    if (isEmpty(Object.keys(options.headers))) {
+      delete options.headers;
+    }
+
+    return new RSVP.Promise((resolve, reject) => {
+      this.jQuery.ajax(options).then((response) => {
+        resolve(response);
+      }, (xhr) => {
+        reject(xhr);
+      });
+    });
   }
 });
