@@ -7,10 +7,9 @@ const {
 } = Ember;
 
 /**
- * @class seneca
  * @namespace authenticators
- * @module ember-seneca-auth
- * @extends ember-simple-auth/authenticators/base/BaseAuthenticator
+ * @module seneca
+ * @extends BaseAuthenticator
  */
 export default BaseAuthenticator.extend({
   senecaAuth: Ember.inject.service('seneca-auth'),
@@ -18,8 +17,7 @@ export default BaseAuthenticator.extend({
   /**
    * Authenticates the session with the specified identification and password.
    *
-   * Uses {{#crossLink "services.seneca-auth/login:method"}}{{/crossLink}} to
-   * perform the authentication against the back end.
+   * Uses [seneca-auth.login()](#module_seneca-auth..login) to perform the authentication against the back end.
    *
    * @method authenticate
    * @param {String} identification The username or email address to authenticate
@@ -51,8 +49,7 @@ export default BaseAuthenticator.extend({
   /**
    * Invalidates the current session.
    *
-   * Uses {{#crossLink "services.seneca-auth/logout:method"}}{{/crossLink}} to indicate
-   * that the session should be invalidate.
+   * Uses [seneca-auth.logout()](#module_seneca-auth..login) to inform the back-end to invalidate the session.
    *
    * The returned promise is always resolved.
    *

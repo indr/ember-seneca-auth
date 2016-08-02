@@ -8,11 +8,9 @@ const {
 } = Ember;
 
 /**
- * The ember-simple-auth authenticator
- *
- * @class seneca-auth
  * @namespace services
- * @module ember-seneca-auth
+ * @module seneca-auth
+ * @extends Ember.Service
  */
 export default Ember.Service.extend({
   jQuery: $,
