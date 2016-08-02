@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import Utils from '../utils';
 
 const {
   isEmpty,
@@ -25,7 +26,7 @@ export default Ember.Service.extend({
    * @public
    */
   login(identification, password, data = {}) {
-    data = Ember.assign({
+    data = Utils.assign({
       username: identification,
       password: password
     }, data);
@@ -64,7 +65,7 @@ export default Ember.Service.extend({
    * @public
    */
   register(emailAddress, password, repeat, nick, name, data = {}) {
-    data = Ember.assign({
+    data = Utils.assign({
       email: emailAddress,
       password: password,
       repeat: repeat,
@@ -84,7 +85,7 @@ export default Ember.Service.extend({
    * @public
    */
   createReset(emailAddress, nick, data = {}) {
-    data = Ember.assign({
+    data = Utils.assign({
       email: emailAddress,
       nick: nick
     }, data);
@@ -100,7 +101,7 @@ export default Ember.Service.extend({
    * @public
    */
   loadReset(token, data) {
-    data = Ember.assign({
+    data = Utils.assign({
       token: token
     }, data);
 
@@ -117,7 +118,7 @@ export default Ember.Service.extend({
    * @public
    */
   executeReset(token, password, repeat, data) {
-    data = Ember.assign({
+    data = Utils.assign({
       token,
       password,
       repeat
@@ -137,7 +138,7 @@ export default Ember.Service.extend({
    * @public
    */
   updateUser(newNick, oldNick, newEmailAddress, oldEmailAddress, data) {
-    data = Ember.assign({
+    data = Utils.assign({
       nick: newNick,
       orig_nick: oldNick,
       email: newEmailAddress,
@@ -156,7 +157,7 @@ export default Ember.Service.extend({
    * @public
    */
   changePassword(password, repeat, data) {
-    data = Ember.assign({
+    data = Utils.assign({
       password,
       repeat
     }, data);
