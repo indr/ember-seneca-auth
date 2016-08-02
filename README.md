@@ -72,7 +72,7 @@ export default Ember.Component.extend({
 
 ### Examples
 
- * [Install](README.md#installation) and (run)[README.md#running-dummy-app] the dummy app.
+ * [Install](#installation) and [run](#running-dummy-app) the dummy app.
  * [seneca-auth service acceptance tests](https://github.com/indr/ember-seneca-auth/blob/master/tests/acceptance/services/seneca-auth-test.js)
    They use a real seneca back-end. Have a look at the seneca server in the [scripts folder](https://github.com/indr/ember-seneca-auth/tree/master/scripts).
 
