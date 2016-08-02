@@ -72,15 +72,15 @@ export default Ember.Component.extend({
 
 ### Examples
 
- * [Install](#Installation) and (run)[#Running Dummy App] the dummy app.
- * `seneca-auth` [acceptance tests](https://github.com/indr/ember-seneca-auth/blob/master/tests/acceptance/services/seneca-auth-test.js)
-   They use a real seneca backend. Have a look at the seneca server in the [scripts folder](https://github.com/indr/ember-seneca-auth/tree/master/scripts).
+ * [Install](README.md#installation) and (run)[README.md#running-dummy-app] the dummy app.
+ * [seneca-auth service acceptance tests](https://github.com/indr/ember-seneca-auth/blob/master/tests/acceptance/services/seneca-auth-test.js)
+   They use a real seneca back-end. Have a look at the seneca server in the [scripts folder](https://github.com/indr/ember-seneca-auth/tree/master/scripts).
 
 ## API
 
-The `[seneca-auth](API.md#module_seneca-auth)` service provides methods according to the [seneca-auth API](https://github.com/senecajs/seneca-auth#api).
+The [seneca-auth service](API.md#module_seneca-auth) provides methods according to the [seneca-auth API](https://github.com/senecajs/seneca-auth#api).
 
-The `[seneca](API.md#module_seneca)` authenticator implements the methods specified by ember-simple-auth's [BaseAuthenticator](http://ember-simple-auth.com/api/classes/BaseAuthenticator.html).
+The [seneca authenticator](API.md#module_seneca) implements the methods specified by ember-simple-auth's [BaseAuthenticator](http://ember-simple-auth.com/api/classes/BaseAuthenticator.html).
 
 See [API](API.md) for more details.
 
