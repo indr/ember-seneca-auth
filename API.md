@@ -1,4 +1,4 @@
-# ember-seneca-auth API
+# ember-seneca-auth API 0.1.1
 
 The `ember-seneca-auth` addon provides these two modules:
 

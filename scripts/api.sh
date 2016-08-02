@@ -1,4 +1,6 @@
-echo -e "# ember-seneca-auth API
+VERSION=$(cat package.json | grep -oE '"version": "[0-9\.]+"' | grep -oE '[0-9\.]+')
+
+echo -e "# ember-seneca-auth API $VERSION
 
 The \`ember-seneca-auth\` addon provides these two modules:
 
