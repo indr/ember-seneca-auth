@@ -23,6 +23,7 @@ function start(done) {
 
   const options = require('./options') || {};
   console.log('Options: ', options);
+  console.log('tmp dir: ' + tmpDir);
 
   const si = self.seneca = seneca()
     .use('entity')
@@ -94,13 +95,21 @@ function noop() {
 
 const server = module.export();
 server.start(function () {
-  console.log('tmp dir is ' + tmpDir);
+
   server.seneca.act('role: user, cmd: register', {
     nick: 'nu1',
     name: 'u1',
     email: 'u1@example.com',
     password: 'pu1',
     repeat: 'pu1',
+    active: true
+  });
+  server.seneca.act('role: user, cmd: register', {
+    nick: 'nu2',
+    name: 'u2',
+    email: 'u2@example.com',
+    password: 'pu2',
+    repeat: 'pu2',
     active: true
   });
 });
