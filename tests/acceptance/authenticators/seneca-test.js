@@ -18,46 +18,55 @@ describeModule(
   },
   function () {
     let authenticator = null;
-
+    
     beforeEach(function () {
       authenticator = this.subject();
     });
-
+    
     describe('authenticate()', function () {
-      it('success: returns a resolving promise with login', function (done) {
-        authenticator.authenticate('u1@example.com', 'pu1')
-          .then(function (login) {
-            assert.equal(login.email, 'u1@example.com');
-            assert.isString(login.token);
-            assert.isAbove(login.token.length, 0);
-            done();
-          });
+      it('success: returns a resolving promise with login object', function (done) {
+        authenticator.authenticate('u1@example.com', 'pu1').then(function (login) {
+          assert.equal(login.email, 'u1@example.com');
+          assert.isString(login.token);
+          assert.isAbove(login.token.length, 0);
+          assert.isString(login.user);
+          done();
+        });
       });
-
+      
+      it('success (options.user): stores user object in session.data', function (done) {
+        authenticator.authenticate('u1@example.com', 'pu1', {user: true}).then((login) => {
+          assert.equal(login.email, 'u1@example.com');
+          assert.isString(login.token);
+          assert.isAbove(login.token.length, 0);
+          assert.isObject(login.user);
+          assert.isString(login.user.id);
+          assert.equal(login.user.email, login.email);
+          done();
+        });
+      });
+      
       it('unknown user: returns a rejecting promise with user-not-found', function (done) {
-        authenticator.authenticate('unknown@example.com', 'password')
-          .catch(function (reason) {
-            assert.equal(reason, 'user-not-found');
-            done();
-          });
+        authenticator.authenticate('unknown@example.com', 'password').catch(function (reason) {
+          assert.equal(reason, 'user-not-found');
+          done();
+        });
       });
-
+      
       it('invalid password: returns a rejecting promise with invalid-password', function (done) {
-        authenticator.authenticate('u1@example.com', 'wrong password')
-          .catch(function (reason) {
-            assert.equal(reason, 'invalid-password');
-            done();
-          });
+        authenticator.authenticate('u1@example.com', 'wrong password').catch(function (reason) {
+          assert.equal(reason, 'invalid-password');
+          done();
+        });
       });
     });
-
+    
     describe('invalidate()', function () {
       it('resolves with ok:true', function (done) {
-        authenticator.invalidate()
-          .then((response) => {
-            assert.equal(response.ok, true);
-            done();
-          });
+        authenticator.invalidate().then((response) => {
+          assert.equal(response.ok, true);
+          done();
+        });
       });
     });
   }
