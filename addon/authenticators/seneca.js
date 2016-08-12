@@ -22,16 +22,11 @@ export default BaseAuthenticator.extend({
    * @method authenticate
    * @param {String} identification The username or email address to authenticate.
    * @param {String} password The users password.
-   * @param {Object} [options=null] An object to configure the response.
-   * @param {Boolean} [options.user] Replaces the `login.user` (user id) with the responses
-   * `user` object. This gives access to user specific data (i.e. data set with
-   * [seneca-auth.updateUser()](#module_seneca-auth..updateUser)). The user id is
-   * then accessible via `login.user.id` respectively `session.get('data.authenticated.user.id')`.
    * @return {Ember.RSVP.Promise}
    * @public
    * @override
    */
-  authenticate(identification, password, options = null) {
+  authenticate(identification, password) {
     const self = this;
     const senecaAuth = this.get('senecaAuth');
     
@@ -43,8 +38,16 @@ export default BaseAuthenticator.extend({
         if (!self._hasLoginWithToken(response)) {
           return reject('no-token');
         }
-        if (options && options.user) {
-          response['login']['user'] = response['user'];
+        
+        const options = self._getOptions();
+        if (options && options.assignFromUser) {
+          var keys = Ember.isArray(options.assignFromUser) ? options.assignFromUser : Object.keys(response['user']);
+          for (var i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            if (key !== 'id' && response['user'].hasOwnProperty(key)) {
+              response['login'][key] = response['user'][key];
+            }
+          }
         }
         return resolve(response['login']);
       });
@@ -97,6 +100,15 @@ export default BaseAuthenticator.extend({
         resolve(data);
       }
     });
+  },
+  
+  /**
+   * @method _getOptions
+   * @returns {Object}
+   * @private
+   */
+  _getOptions() {
+    return Ember.getOwner(this).resolveRegistration('config:environment')['seneca-auth'] || {};
   },
   
   /**

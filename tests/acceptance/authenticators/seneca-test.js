@@ -14,12 +14,18 @@ describeModule(
   'Acceptance | SenecaAuthenticator',
   {
     // Specify the other units that are required for this test.
-    needs: ['service:seneca-auth']
+    needs: [
+      'config:environment',
+      'service:seneca-auth'
+    ]
   },
   function () {
-    let authenticator = null;
+    let authenticator = null,
+      options = null;
     
     beforeEach(function () {
+      options = {APP: {}};
+      this.register('config:environment', options);
       authenticator = this.subject();
     });
     
@@ -30,18 +36,19 @@ describeModule(
           assert.isString(login.token);
           assert.isAbove(login.token.length, 0);
           assert.isString(login.user);
+          assert.notProperty(login, 'name');
           done();
         });
       });
       
-      it('success (options.user): stores user object in session.data', function (done) {
-        authenticator.authenticate('u1@example.com', 'pu1', {user: true}).then((login) => {
+      it('success (options.assignFromUser: true): stores user object in session.data', function (done) {
+        options['seneca-auth'] = {assignFromUser: true};
+        authenticator.authenticate('u1@example.com', 'pu1').then((login) => {
           assert.equal(login.email, 'u1@example.com');
           assert.isString(login.token);
           assert.isAbove(login.token.length, 0);
-          assert.isObject(login.user);
-          assert.isString(login.user.id);
-          assert.equal(login.user.email, login.email);
+          assert.isString(login.user);
+          assert.equal(login.name, 'u1');
           done();
         });
       });
