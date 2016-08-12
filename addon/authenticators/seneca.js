@@ -41,7 +41,8 @@ export default BaseAuthenticator.extend({
         
         const options = self._getOptions();
         if (options && options.assignFromUser) {
-          var keys = Ember.isArray(options.assignFromUser) ? options.assignFromUser : Object.keys(response['user']);
+          var keys = Ember.isArray(options.assignFromUser) ? options.assignFromUser :
+            (typeof options.assignFromUser === 'string' ? [options.assignFromUser] : Object.keys(response['user']));
           for (var i = 0; i < keys.length; i++) {
             const key = keys[i];
             if (key !== 'id' && response['user'].hasOwnProperty(key)) {

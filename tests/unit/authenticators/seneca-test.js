@@ -196,6 +196,22 @@ describeModule(
           });
         });
         
+        it("assignFromUser: 'custom1'", function (done) {
+          authenticator._getOptions = function () {
+            return {assignFromUser: 'custom1'};
+          };
+          authenticator.authenticate('user', 'pass').then((login) => {
+            assert.equal(login.id, 'gcccca07-dae8-4f33-b0ad-26774850e91c');
+            assert.equal(login.user, 'wdm801');
+            assert.equal(login.why, 'password');
+            assert.equal(login.token, 'fcccca07-dae8-4f33-b0ad-26774850e91c');
+            assert.equal(login.custom1, 'value1');
+            assert.notProperty(login, 'custom2');
+            assert.notProperty(login, 'name');
+            done();
+          });
+        });
+        
         it("assignFromUser: ['custom1','name']", function (done) {
           authenticator._getOptions = function () {
             return {assignFromUser: ['custom1', 'name']};
