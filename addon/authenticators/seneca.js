@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import BaseAuthenticator from 'ember-simple-auth/authenticators/base';
+import getOwner from 'ember-getowner-polyfill';
 
 const {
   isEmpty,
@@ -109,7 +110,7 @@ export default BaseAuthenticator.extend({
    * @private
    */
   _getOptions() {
-    return Ember.getOwner(this).resolveRegistration('config:environment')['seneca-auth'] || {};
+    return getOwner(this).resolveRegistration('config:environment')['seneca-auth'] || {};
   },
   
   /**
