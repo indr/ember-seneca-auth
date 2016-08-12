@@ -1,6 +1,6 @@
 {
   "name": "ember-seneca-auth",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Senecajs' seneca-auth api client and authenticator for ember-simple-auth",
   "directories": {
     "doc": "doc",
@@ -11,8 +11,7 @@
     "start": "ember server",
     "pretest": "scripts/start-server.sh",
     "test": "ember try:each",
-    "posttest": "scripts/stop-server.sh",
-    "postversion": "scripts/api.sh"
+    "posttest": "scripts/stop-server.sh"
   },
   "repository": {
     "type": "git",

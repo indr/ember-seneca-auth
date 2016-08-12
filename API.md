@@ -1,4 +1,4 @@
-# ember-seneca-auth API 0.1.1
+# ember-seneca-auth API 0.2.0
 
 The `ember-seneca-auth` addon provides these two modules:
 
@@ -14,7 +14,7 @@ The `ember-seneca-auth` addon provides these two modules:
 * [seneca](#module_seneca) ⇐ <code>BaseAuthenticator</code>
     * [~authenticate(identification, password)](#module_seneca..authenticate) ⇒ <code>Ember.RSVP.Promise</code>
     * [~invalidate()](#module_seneca..invalidate) ⇒ <code>Ember.RSVP.Promise</code>
-    * [~restore(login)](#module_seneca..restore) ⇒ <code>Ember.RSVP.Promise</code>
+    * [~restore()](#module_seneca..restore) ⇒ <code>Ember.RSVP.Promise</code>
 
 <a name="module_seneca..authenticate"></a>
 
@@ -28,8 +28,8 @@ Uses [seneca-auth.login()](#module_seneca-auth..login) to perform the authentica
 
 | Param | Type | Description |
 | --- | --- | --- |
-| identification | <code>String</code> | The username or email address to authenticate |
-| password | <code>String</code> | The password |
+| identification | <code>String</code> | The username or email address to authenticate. |
+| password | <code>String</code> | The users password. |
 
 <a name="module_seneca..invalidate"></a>
 
@@ -44,20 +44,14 @@ The returned promise is always resolved.
 **Access:** public  
 <a name="module_seneca..restore"></a>
 
-### seneca~restore(login) ⇒ <code>Ember.RSVP.Promise</code>
+### seneca~restore() ⇒ <code>Ember.RSVP.Promise</code>
 Tries to restore a previous session.
 
-The returned promise is resolved with `login` if a `login.token` is present.
-Otherwise rejects with `'no-token'`.
+Uses [senece-auth.user()](#module_seneca-auth..user) to get the login and user data from the server. The
+server responds with ok:true and no login object if the session is not valid or was invalidated.
 
 **Kind**: inner method of <code>[seneca](#module_seneca)</code>  
 **Access:** public  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| login | <code>Object</code> | The login data |
-| login.token | <code>String</code> | The login token |
-
 <a name="module_seneca-auth"></a>
 
 ## seneca-auth ⇐ <code>Ember.Service</code>
