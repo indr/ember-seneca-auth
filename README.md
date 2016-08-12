@@ -76,6 +76,25 @@ export default Ember.Component.extend({
  * The [acceptance tests](https://github.com/indr/ember-seneca-auth/blob/master/tests/acceptance/) use a real seneca back-end.  
    Have a look at the seneca server in the [scripts folder](https://github.com/indr/ember-seneca-auth/tree/master/scripts).
 
+## Options
+
+```js
+// config/environment.js
+module.exports = function(environment) {
+  return {
+    'seneca-auth': {
+      // `seneca-auth` returns beside the `login` object the `user` object. Use
+      // this option to assign values from the user to the login object.
+      //
+      // Specifiy either a string, an array or `true` to assign all the
+      // users properties except `'id'` (this would overwrite the login id and
+      // is never assigned).
+      assignFromUser: ['name', 'myProp']
+    }
+  }
+}
+```
+
 ## API
 
 The [seneca-auth service](API.md#module_seneca-auth) provides methods according to the [seneca-auth API](https://github.com/senecajs/seneca-auth#api).

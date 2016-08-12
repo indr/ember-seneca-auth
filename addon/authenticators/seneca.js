@@ -29,9 +29,9 @@ export default BaseAuthenticator.extend({
    */
   authenticate(identification, password) {
     const self = this;
-    const senecaAuth = this.get('senecaAuth');
     
     return new RSVP.Promise((resolve, reject) => {
+      const senecaAuth = this.get('senecaAuth');
       senecaAuth.login(identification, password).then((response) => {
         if (!self._isOk(response)) {
           return reject(response['why'] || 'no-reason');
@@ -40,17 +40,8 @@ export default BaseAuthenticator.extend({
           return reject('no-token');
         }
         
-        const options = self._getOptions();
-        if (options && options.assignFromUser) {
-          var keys = Ember.isArray(options.assignFromUser) ? options.assignFromUser :
-            (typeof options.assignFromUser === 'string' ? [options.assignFromUser] : Object.keys(response['user']));
-          for (var i = 0; i < keys.length; i++) {
-            const key = keys[i];
-            if (key !== 'id' && response['user'].hasOwnProperty(key)) {
-              response['login'][key] = response['user'][key];
-            }
-          }
-        }
+        self._assignFromUser(response, self._getOptions());
+        
         return resolve(response['login']);
       });
     });
@@ -81,26 +72,34 @@ export default BaseAuthenticator.extend({
   /**
    * Tries to restore a previous session.
    *
-   * The returned promise is resolved with `login` if a `login.token` is present.
-   * Otherwise rejects with `'no-token'`.
+   * Uses [senece-auth.user()](#module_seneca-auth..user) to get the login and user data from the server. The
+   * server responds with ok:true and no login object if the session is not valid or was invalidated.
    *
    * @method restore
-   * @param {Object} data The login data
-   * @param {String} data.token The login token
    * @return {Ember.RSVP.Promise}
    * @public
    * @override
    */
-  restore(data) {
+  restore(/*data*/) {
     const self = this;
     
     return new RSVP.Promise((resolve, reject) => {
-      if (!self._hasToken(data)) {
-        reject('no-token');
-      }
-      else {
-        resolve(data);
-      }
+      const senecaAuth = this.get('senecaAuth');
+      senecaAuth.user().then((response) => {
+        if (!self._isOk(response)) {
+          return reject(response['why'] || 'no-reason');
+        }
+        if (!response['login']) {
+          return reject('invalid-session');
+        }
+        if (!self._hasLoginWithToken(response)) {
+          return reject('no-token');
+        }
+        
+        self._assignFromUser(response, self._getOptions());
+        
+        return resolve(response['login']);
+      });
     });
   },
   
@@ -147,5 +146,26 @@ export default BaseAuthenticator.extend({
    */
   _hasToken(login) {
     return login && !isEmpty(login['token']);
+  },
+  
+  /**
+   * Assigns properties from the user object to the login object based on `options.assignFromUser`.
+   *
+   * @method _assignFromUser
+   * @param {Object} response
+   * @param {Object} options
+   * @private
+   */
+  _assignFromUser(response, options) {
+    if (options && options.assignFromUser) {
+      var keys = Ember.isArray(options.assignFromUser) ? options.assignFromUser :
+        (typeof options.assignFromUser === 'string' ? [options.assignFromUser] : Object.keys(response['user']));
+      for (var i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        if (key !== 'id' && response['user'].hasOwnProperty(key)) {
+          response['login'][key] = response['user'][key];
+        }
+      }
+    }
   }
 });

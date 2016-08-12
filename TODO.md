@@ -1,7 +1,8 @@
-# ember-seneca-Todo
+# ember-seneca-auth Todo
 
- - [ ] Option for http-header instead of session-cookie
+ - [ ] Option for http-header instead of session-cookie?
  - [ ] Adapter mixin for http-header key?
+ - [x] authenticator.restore()
 
 ## Report issues
  

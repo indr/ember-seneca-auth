@@ -68,6 +68,46 @@ describeModule(
       });
     });
     
+    describe('restore()', function () {
+      beforeEach(function (done) {
+        authenticator.invalidate().then(() => done());
+      });
+      
+      it('unauthenticated: returns a rejecting promise with invalid-session', function (done) {
+        authenticator.restore().catch((reason) => {
+          assert.equal(reason, 'invalid-session');
+          done();
+        });
+      });
+      
+      it('success: returns a resolving promise with login object', function (done) {
+        authenticator.authenticate('u1@example.com', 'pu1').then(function () {
+          authenticator.restore().then(function (login) {
+            assert.equal(login.email, 'u1@example.com');
+            assert.isString(login.token);
+            assert.isAbove(login.token.length, 0);
+            assert.isString(login.user);
+            assert.notProperty(login, 'name');
+            done();
+          });
+        });
+      });
+      
+      it('success (options.assignFromUser: true): stores user object in session.data', function (done) {
+        authenticator.authenticate('u1@example.com', 'pu1').then(() => {
+          options['seneca-auth'] = {assignFromUser: true};
+          authenticator.restore().then((login) => {
+            assert.equal(login.email, 'u1@example.com');
+            assert.isString(login.token);
+            assert.isAbove(login.token.length, 0);
+            assert.isString(login.user);
+            assert.equal(login.name, 'u1');
+            done();
+          });
+        });
+      });
+    });
+    
     describe('invalidate()', function () {
       it('resolves with ok:true', function (done) {
         authenticator.invalidate().then((response) => {
