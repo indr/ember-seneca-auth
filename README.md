@@ -103,24 +103,30 @@ The [seneca authenticator](API.md#module_seneca) implements the methods specifie
 
 See [API](API.md) for more details.
 
+## Changelog
+
+[CHANGELOG](CHANGELOG.md)
+
 ## License
 
 [MIT](LICENSE.md)
 
-## Installation
+## Contributing
+
+### Installation
 
 * `git clone` this repository
 * `npm install`
 * `bower install`
 
-## Running Dummy App
+### Running Dummy App
 
 * `./scripts/start-server.sh`
 * `ember serve --proxy http://localhost:3000`
 * Visit your app at http://localhost:4200.
 * `./scripts/stop-server.sh`
 
-## Running Tests
+### Running Tests
 
 * `npm test` (Runs `ember try:testall` to test your addon against multiple Ember versions). Automatically starts and stops the seneca server.
 * `./scripts/start-server.sh`  
@@ -130,7 +136,7 @@ See [API](API.md) for more details.
   `ember test --server`  
   `./scripts/stop-server.sh`
 
-## Building
+### Building
 
 * `ember build`
 
